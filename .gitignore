@@ -57,11 +57,11 @@ node_modules/.bin/
 
 # yarn v2
 .yarn/*
+.yarn/*/**
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
 !.yarn/workspace.js
-
 # End of https://www.toptal.com/developers/gitignore/api/node
 
