@@ -1,10 +1,10 @@
 import { User } from "@/entity/User";
-import { DeleteResult, Repository, UpdateResult } from "typeorm";
-import { CreateUserDto, UpdateUserDto } from "@/dto/users";
+import { DeepPartial, DeleteResult, Repository, UpdateResult } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
 class UserService {
   constructor(private usersRepository: Repository<User>) {}
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: DeepPartial<User>) {
     return await this.usersRepository.save(createUserDto);
   }
 
@@ -18,7 +18,7 @@ class UserService {
 
   update(
     expression: Record<string, string>,
-    updateUserDto: UpdateUserDto,
+    updateUserDto: QueryDeepPartialEntity<User>,
   ): Promise<UpdateResult> {
     return this.usersRepository.update(expression, updateUserDto);
   }

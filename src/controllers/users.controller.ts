@@ -1,12 +1,30 @@
 import { Request, Response } from "express";
 import UserService from "@/services/user.service";
+import RestaurantsService from "@/services/restaurants.service";
 import { CreateUserDto, UpdateUserDto } from "@/dto/users";
 
 class UsersController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private restaurantsService: RestaurantsService,
+  ) {}
 
   async create(req: Request, res: Response) {
-    const user = await this.userService.create(req.body as CreateUserDto);
+    const { restaurantId, ...rest } = req.body as CreateUserDto;
+    const restaurant = await this.restaurantsService.findOne({
+      id: restaurantId as unknown as string,
+    });
+
+    if (!restaurant) {
+      return res.status(400).json({
+        message: "restaurant not found",
+      });
+    }
+
+    const user = await this.userService.create({
+      ...rest,
+      restaurant,
+    });
     res.json(user);
   }
 

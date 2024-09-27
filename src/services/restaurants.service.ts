@@ -1,15 +1,15 @@
 import { Restaurant } from "@/entity/Restaurant";
-import { DeleteResult, Repository, UpdateResult } from "typeorm";
-import { CreateRestaurantDto, UpdateRestaurantDto } from "@/dto/restaurants";
+import { DeepPartial, DeleteResult, Repository, UpdateResult } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
 class UserService {
   constructor(private restaurantsRepository: Repository<Restaurant>) {}
-  async create(createRestaurantDto: CreateRestaurantDto) {
+  async create(createRestaurantDto: DeepPartial<Restaurant>) {
     return await this.restaurantsRepository.save(createRestaurantDto);
   }
 
   findAll(): Promise<Restaurant[]> {
-    return this.restaurantsRepository.find();
+    return this.restaurantsRepository.find({ relations: { users: true } });
   }
 
   findOne(expression: Record<string, string>): Promise<Restaurant | null> {
@@ -18,7 +18,7 @@ class UserService {
 
   update(
     expression: Record<string, string>,
-    updateRestaurantDto: UpdateRestaurantDto,
+    updateRestaurantDto: QueryDeepPartialEntity<Restaurant>,
   ): Promise<UpdateResult> {
     return this.restaurantsRepository.update(expression, updateRestaurantDto);
   }
