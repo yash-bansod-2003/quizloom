@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { type Express } from "express";
+import { Express } from "express";
 import { createServer } from "@/server";
 import configuration from "@/config/configuration";
 import { AppDataSource } from "@/data-source";

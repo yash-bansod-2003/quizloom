@@ -1,4 +1,4 @@
-import express, { type Express } from "express";
+import express, { Express } from "express";
 import usersRouter from "@/routes/user.router";
 import authRouter from "@/routes/auth.router";
 import restaurantsRouter from "@/routes/restaurants.router";
