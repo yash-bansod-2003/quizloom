@@ -1,25 +1,31 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "rootDir": "./src",
-    "baseUrl": "./",
+    "target": "ES5",
+    "lib": ["ES5", "ES6"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "outDir": "./dist",
+    "declaration": false,
+    "sourceMap": true,
+    "outDir": "./dist/src",
     "removeComments": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noImplicitAny": true,
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true,
     "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "strictPropertyInitialization": false,
-    "strictBindCallApply": true
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

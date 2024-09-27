@@ -1,15 +1,20 @@
 import express, { type Express } from "express";
+import usersRouter from "@/routes/user.router";
+import authRouter from "@/routes/auth.router";
 
 export const createServer = (): Express => {
   const app = express();
   app
     .disable("x-powered-by")
+    .use(express.json())
     .get("/status", (_, res) => {
       return res.json({ ok: true });
     })
     .get("/message/:name", (req, res) => {
       res.json({ message: `hello ${req.params.name}` });
-    });
+    })
+    .use("/users", usersRouter)
+    .use("/auth", authRouter);
 
   return app;
 };
