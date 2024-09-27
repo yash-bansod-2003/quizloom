@@ -1,6 +1,7 @@
 import express, { type Express } from "express";
 import usersRouter from "@/routes/user.router";
 import authRouter from "@/routes/auth.router";
+import restaurantsRouter from "@/routes/restaurants.router";
 
 export const createServer = (): Express => {
   const app = express();
@@ -13,8 +14,9 @@ export const createServer = (): Express => {
     .get("/message/:name", (req, res) => {
       res.json({ message: `hello ${req.params.name}` });
     })
+    .use("/auth", authRouter)
     .use("/users", usersRouter)
-    .use("/auth", authRouter);
+    .use("/restaurants", restaurantsRouter);
 
   return app;
 };
