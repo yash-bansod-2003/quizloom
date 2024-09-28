@@ -10,7 +10,7 @@ pids
 *.pid.lock
 dist
  # coverage
-coverage
+coverage/
 
 # Runtime data
 pids
