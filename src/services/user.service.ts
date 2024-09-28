@@ -13,7 +13,10 @@ class UserService {
   }
 
   findOne(expression: Record<string, string>): Promise<User | null> {
-    return this.usersRepository.findOneBy(expression);
+    return this.usersRepository.findOne({
+      where: expression,
+      relations: { restaurant: true },
+    });
   }
 
   update(

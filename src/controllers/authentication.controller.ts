@@ -32,9 +32,10 @@ class AutenticationController {
         message: "wrong credentials",
       });
     }
+
     const payload: JsonWebToken.JwtPayload = {
       sub: String(user.id),
-      restaurantId: 1,
+      restaurantId: user?.restaurant.id ?? null,
     };
 
     const accessToken = this.accessTokensService.generate(payload);

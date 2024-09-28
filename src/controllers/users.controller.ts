@@ -39,9 +39,16 @@ class UsersController {
   }
 
   async update(req: Request, res: Response) {
+    const { restaurantId, ...rest } = req.body as UpdateUserDto;
+    const restaurant = await this.restaurantsService.findOne({
+      id: restaurantId as unknown as string,
+    });
     const user = await this.userService.update(
       { id: req.params.id },
-      req.body as UpdateUserDto,
+      {
+        ...rest,
+        restaurant: restaurant as never,
+      },
     );
     res.json(user);
   }
