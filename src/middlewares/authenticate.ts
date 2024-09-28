@@ -15,7 +15,18 @@ const authenticate = async (
   if (!match) {
     return res.status(401).json({ message: "Unauthorized" });
   }
+  req["user"] = match;
   next();
 };
+
+export interface AuthenticatedRequest extends Request {
+  user: {
+    sub: string;
+    role: string;
+    restaurantId: number;
+    iat: number;
+    exp: number;
+  };
+}
 
 export default authenticate;

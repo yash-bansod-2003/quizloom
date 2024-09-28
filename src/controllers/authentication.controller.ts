@@ -3,6 +3,7 @@ import JsonWebToken from "jsonwebtoken";
 import UserService from "@/services/user.service";
 import { AccessTokensService } from "@/services/tokens.service";
 import { CreateUserDto } from "@/dto/users";
+import { AuthenticatedRequest } from "@/middlewares/authenticate";
 
 class AutenticationController {
   constructor(
@@ -11,7 +12,12 @@ class AutenticationController {
   ) {}
 
   async register(req: Request, res: Response) {
-    const user = await this.userService.create(req.body as CreateUserDto);
+    const { email, ...rest } = req.body as CreateUserDto;
+    const userExists = await this.userService.findOne({ email });
+    if (userExists) {
+      return res.json({ message: "user already exists" });
+    }
+    const user = await this.userService.create({ email, ...rest });
     res.json(user);
   }
 
@@ -43,8 +49,13 @@ class AutenticationController {
 
     return res.json({ accessToken });
   }
-  profile(req: Request, res: Response) {
-    return res.json({ message: "profile" });
+  async profile(req: Request, res: Response) {
+    const id = (req as AuthenticatedRequest).user.sub;
+    const user = await this.userService.findOne({ id });
+    if (!user) {
+      return res.status(400).json({ message: "user not found" });
+    }
+    return res.json(user);
   }
 }
 

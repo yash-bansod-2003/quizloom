@@ -32,6 +32,7 @@ router.get(
   "/profile",
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   authenticationMiddleware,
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   authenticationController.profile.bind(authenticationController),
 );
 
