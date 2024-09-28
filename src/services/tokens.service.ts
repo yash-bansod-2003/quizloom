@@ -16,4 +16,15 @@ class AccessTokensService extends TokensService {
   }
 }
 
-export { AccessTokensService };
+class RefreshTokensService extends TokensService {
+  generate(payload: JsonWebToken.JwtPayload): string {
+    const accessToken = JsonWebToken.sign(payload, "secret");
+    return accessToken;
+  }
+
+  verify(token: string): JsonWebToken.JwtPayload | string {
+    return JsonWebToken.verify(token, "secret");
+  }
+}
+
+export { AccessTokensService, RefreshTokensService };
