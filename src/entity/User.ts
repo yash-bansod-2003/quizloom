@@ -18,6 +18,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ enum: ["user", "manager", "admin"], default: "user" })
+  role: string;
+
   @ManyToOne(() => Restaurant, (restaurant) => restaurant.users)
   restaurant: Restaurant;
 }

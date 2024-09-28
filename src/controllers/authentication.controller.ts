@@ -36,6 +36,7 @@ class AutenticationController {
     const payload: JsonWebToken.JwtPayload = {
       sub: String(user.id),
       restaurantId: user?.restaurant.id ?? null,
+      role: user.role,
     };
 
     const accessToken = this.accessTokensService.generate(payload);
