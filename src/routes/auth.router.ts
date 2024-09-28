@@ -7,6 +7,7 @@ import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/User";
 import authenticationMiddleware from "@/middlewares/authenticate";
 import { userCreateValidator } from "@/validators/users.validators";
+import logger from "@/config/logger";
 
 const router = Router();
 
@@ -16,6 +17,7 @@ const usersService = new UsersService(usersRepository);
 const authenticationController = new AutenticationController(
   usersService,
   accessTokensService,
+  logger,
 );
 
 router.post(

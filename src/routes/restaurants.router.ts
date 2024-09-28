@@ -6,12 +6,16 @@ import { AppDataSource } from "@/data-source";
 import { Restaurant } from "@/entity/Restaurant";
 import authenticate from "@/middlewares/authenticate";
 import authorization from "@/middlewares/authorization";
+import logger from "@/config/logger";
 
 const router = Router();
 
 const usersRepository = AppDataSource.getRepository(Restaurant);
 const restaurantsService = new RestaurantsService(usersRepository);
-const restaurantsController = new RestaurantsController(restaurantsService);
+const restaurantsController = new RestaurantsController(
+  restaurantsService,
+  logger,
+);
 import { restaurantCreateValidator } from "@/validators/restaurants.validator";
 
 router.post(

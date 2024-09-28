@@ -2,6 +2,7 @@ import { config } from "dotenv";
 config({ path: `.env.${process.env.NODE_ENV}` });
 
 const configuration = {
+  node_env: process.env.NODE_ENV,
   host: process.env.HOST,
   port: process.env.PORT,
   database: {

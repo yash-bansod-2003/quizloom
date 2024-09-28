@@ -4,11 +4,13 @@ import UserService from "@/services/user.service";
 import { AccessTokensService } from "@/services/tokens.service";
 import { CreateUserDto } from "@/dto/users";
 import { AuthenticatedRequest } from "@/middlewares/authenticate";
+import { Logger } from "winston";
 
 class AutenticationController {
   constructor(
     private userService: UserService,
     private accessTokensService: AccessTokensService,
+    private logger: Logger,
   ) {}
 
   async register(req: Request, res: Response) {

@@ -2,11 +2,13 @@ import { Request, Response } from "express";
 import UserService from "@/services/user.service";
 import RestaurantsService from "@/services/restaurants.service";
 import { CreateUserDto, UpdateUserDto } from "@/dto/users";
+import { Logger } from "winston";
 
 class UsersController {
   constructor(
     private userService: UserService,
     private restaurantsService: RestaurantsService,
+    private logger: Logger,
   ) {}
 
   async create(req: Request, res: Response) {

@@ -8,6 +8,7 @@ import { User } from "@/entity/User";
 import { Restaurant } from "@/entity/Restaurant";
 import authenticate from "@/middlewares/authenticate";
 import authorization from "@/middlewares/authorization";
+import logger from "@/config/logger";
 
 const router = Router();
 
@@ -15,7 +16,11 @@ const usersRepository = AppDataSource.getRepository(User);
 const restaurantsRepository = AppDataSource.getRepository(Restaurant);
 const usersService = new UsersService(usersRepository);
 const restaurantsService = new RestaurantsService(restaurantsRepository);
-const usersController = new UsersController(usersService, restaurantsService);
+const usersController = new UsersController(
+  usersService,
+  restaurantsService,
+  logger,
+);
 
 router.post(
   "/",
