@@ -12,11 +12,13 @@ const router = Router();
 const usersRepository = AppDataSource.getRepository(Restaurant);
 const restaurantsService = new RestaurantsService(usersRepository);
 const restaurantsController = new RestaurantsController(restaurantsService);
+import { restaurantCreateValidator } from "@/validators/restaurants.validator";
 
 router.post(
   "/",
   authenticate,
   authorization(["admin", "manager"]),
+  restaurantCreateValidator,
   restaurantsController.create.bind(restaurantsController),
 );
 

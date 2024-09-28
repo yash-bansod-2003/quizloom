@@ -6,6 +6,7 @@ import { AccessTokensService } from "@/services/tokens.service";
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/User";
 import authenticationMiddleware from "@/middlewares/authenticate";
+import { userCreateValidator } from "@/validators/users.validators";
 
 const router = Router();
 
@@ -19,6 +20,7 @@ const authenticationController = new AutenticationController(
 
 router.post(
   "/register",
+  userCreateValidator,
   authenticationController.register.bind(authenticationController),
 );
 
