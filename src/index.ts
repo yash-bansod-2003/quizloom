@@ -1,15 +1,17 @@
-import { type Express } from "express";
+import "reflect-metadata";
+import { Express } from "express";
 import { createServer } from "@/server";
-import { config } from "dotenv";
-config({ path: `.env.${process.env.NODE_ENV}` });
+import configuration from "@/config/configuration";
+import { AppDataSource } from "@/data-source";
 
-const port = parseInt(process.env.port!) ?? 5000;
-const host = process.env.host ?? "localhost";
-
+const port = configuration.port ? parseInt(configuration.port) : 5000;
+const host = configuration.host ?? "localhost";
 const server: Express = createServer();
 
-server.listen(port, host, () => {
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+server.listen(port, host, async () => {
   try {
+    await AppDataSource.initialize();
     console.log(`Server Listening on port ${port}`);
   } catch (error: unknown) {
     console.error(error);
