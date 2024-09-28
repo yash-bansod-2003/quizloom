@@ -9,6 +9,7 @@ export const createServer = (): Express => {
   app
     .disable("x-powered-by")
     .use(express.json())
+    .use(express.static("public"))
     .get("/status", (_, res) => {
       return res.json({ ok: true });
     })

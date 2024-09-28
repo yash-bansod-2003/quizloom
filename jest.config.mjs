@@ -7,7 +7,7 @@ const config = {
   preset: "ts-jest",
   clearMocks: true,
   verbose: true,
-  collectCoverage: false,
+  collectCoverage: true,
   coverageDirectory: "coverage",
   coverageProvider: "v8",
 };

@@ -1,12 +1,38 @@
-import { Router, Request, Response } from "express";
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { Router } from "express";
+import AutenticationController from "@/controllers/authentication.controller";
+import UsersService from "@/services/user.service";
+import { AccessTokensService } from "@/services/tokens.service";
+import { AppDataSource } from "@/data-source";
+import { User } from "@/entity/User";
+import authenticationMiddleware from "@/middlewares/authenticate";
+import { userCreateValidator } from "@/validators/users.validators";
+
 const router = Router();
 
-router.post("/register", (req: Request, res: Response) => {
-  return res.json({ message: "register" });
-});
+const usersRepository = AppDataSource.getRepository(User);
+const accessTokensService = new AccessTokensService();
+const usersService = new UsersService(usersRepository);
+const authenticationController = new AutenticationController(
+  usersService,
+  accessTokensService,
+);
 
-router.post("/login", (req: Request, res: Response) => {
-  return res.json({ message: "login" });
-});
+router.post(
+  "/register",
+  userCreateValidator,
+  authenticationController.register.bind(authenticationController),
+);
+
+router.post(
+  "/login",
+  authenticationController.login.bind(authenticationController),
+);
+
+router.get(
+  "/profile",
+  authenticationMiddleware,
+  authenticationController.profile.bind(authenticationController),
+);
 
 export default router;

@@ -11,6 +11,7 @@ const configuration = {
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE,
   },
+  jwks_uri: process.env.JWKS_URI,
 };
 
 export default configuration;

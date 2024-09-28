@@ -10,7 +10,7 @@ pids
 *.pid.lock
 dist
  # coverage
-coverage
+coverage/
 
 # Runtime data
 pids
@@ -65,3 +65,4 @@ node_modules/.bin/
 !.yarn/workspace.js
 # End of https://www.toptal.com/developers/gitignore/api/node
 
+certs
