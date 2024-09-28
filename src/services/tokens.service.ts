@@ -1,5 +1,7 @@
 import JsonWebToken from "jsonwebtoken";
 import fs from "node:fs";
+import JwksRsa from "jwks-rsa";
+import configuration from "@/config/configuration";
 
 abstract class TokensService {
   abstract generate(payload: JsonWebToken.JwtPayload): string;
@@ -20,8 +22,15 @@ class AccessTokensService extends TokensService {
     return accessToken;
   }
 
-  verify(token: string): JsonWebToken.JwtPayload | string {
-    return JsonWebToken.verify(token, "secret");
+  async verify(token: string): Promise<JsonWebToken.JwtPayload | string> {
+    const client = JwksRsa({
+      jwksUri: configuration.jwks_uri!,
+      cache: true,
+      rateLimit: true,
+    });
+    const key = await client.getSigningKey();
+    const signingKey = key.getPublicKey();
+    return JsonWebToken.verify(token, signingKey);
   }
 }
 

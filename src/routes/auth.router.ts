@@ -4,6 +4,7 @@ import UsersService from "@/services/user.service";
 import { AccessTokensService } from "@/services/tokens.service";
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/User";
+import authenticationMiddleware from "@/middlewares/authenticate";
 
 const router = Router();
 
@@ -25,6 +26,13 @@ router.post(
   "/login",
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   authenticationController.login.bind(authenticationController),
+);
+
+router.get(
+  "/profile",
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  authenticationMiddleware,
+  authenticationController.profile.bind(authenticationController),
 );
 
 export default router;

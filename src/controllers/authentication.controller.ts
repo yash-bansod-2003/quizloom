@@ -34,12 +34,15 @@ class AutenticationController {
     }
     const payload: JsonWebToken.JwtPayload = {
       sub: String(user.id),
-      firstName: user.firstName,
+      restaurantId: 1,
     };
 
     const accessToken = this.accessTokensService.generate(payload);
 
     return res.json({ accessToken });
+  }
+  profile(req: Request, res: Response) {
+    return res.json({ message: "profile" });
   }
 }
 
