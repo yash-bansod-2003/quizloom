@@ -1,27 +1,51 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from "express";
 import RestaurantsController from "@/controllers/restaurants.controller";
 import RestaurantsService from "@/services/restaurants.service";
 import { AppDataSource } from "@/data-source";
 import { Restaurant } from "@/entity/Restaurant";
+import authenticate from "@/middlewares/authenticate";
+import authorization from "@/middlewares/authorization";
+
 const router = Router();
 
 const usersRepository = AppDataSource.getRepository(Restaurant);
 const restaurantsService = new RestaurantsService(usersRepository);
 const restaurantsController = new RestaurantsController(restaurantsService);
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.post("/", restaurantsController.create.bind(restaurantsController));
+router.post(
+  "/",
+  authenticate,
+  authorization(["admin", "manager"]),
+  restaurantsController.create.bind(restaurantsController),
+);
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.get("/", restaurantsController.findAll.bind(restaurantsController));
+router.get(
+  "/",
+  authenticate,
+  authorization(["admin", "manager"]),
+  restaurantsController.findAll.bind(restaurantsController),
+);
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.get("/:id", restaurantsController.findOne.bind(restaurantsController));
+router.get(
+  "/:id",
+  authenticate,
+  authorization(["admin", "manager"]),
+  restaurantsController.findOne.bind(restaurantsController),
+);
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.put("/:id", restaurantsController.update.bind(restaurantsController));
+router.put(
+  "/:id",
+  authenticate,
+  authorization(["admin", "manager"]),
+  restaurantsController.update.bind(restaurantsController),
+);
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-router.delete("/:id", restaurantsController.delete.bind(restaurantsController));
+router.delete(
+  "/:id",
+  authenticate,
+  authorization(["admin", "manager"]),
+  restaurantsController.delete.bind(restaurantsController),
+);
 
 export default router;
