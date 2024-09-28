@@ -16,9 +16,9 @@ class AutenticationController {
   }
 
   async login(req: Request, res: Response) {
-    const { firstName } = req.body as CreateUserDto;
+    const { email, password } = req.body as CreateUserDto;
     const user = await this.userService.findOne({
-      firstName,
+      email,
     });
 
     if (!user) {
@@ -27,6 +27,11 @@ class AutenticationController {
       });
     }
 
+    if (user.password !== password) {
+      return res.status(400).json({
+        message: "wrong credentials",
+      });
+    }
     const payload: JsonWebToken.JwtPayload = {
       sub: String(user.id),
       firstName: user.firstName,
