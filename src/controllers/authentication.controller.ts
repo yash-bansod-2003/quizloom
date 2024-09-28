@@ -15,11 +15,15 @@ class AutenticationController {
 
   async register(req: Request, res: Response) {
     const { email, ...rest } = req.body as CreateUserDto;
+    this.logger.debug(`initiate registering user ${email}`);
     const userExists = await this.userService.findOne({ email });
     if (userExists) {
+      this.logger.debug(`user already exists with ${email} email`);
       return res.json({ message: "user already exists" });
     }
+    this.logger.debug("registering user");
     const user = await this.userService.create({ email, ...rest });
+    this.logger.debug("user registered successfully");
     res.json(user);
   }
 
