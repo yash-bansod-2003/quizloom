@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express, { Express } from "express";
 import usersRouter from "@/routes/user.router";
 import authRouter from "@/routes/auth.router";
