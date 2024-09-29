@@ -45,4 +45,17 @@ class RefreshTokensService extends TokensService {
   }
 }
 
-export { AccessTokensService, RefreshTokensService };
+class ForgotTokensService extends TokensService {
+  generate(payload: JsonWebToken.JwtPayload): string {
+    const token = JsonWebToken.sign(payload, "secret", {
+      expiresIn: "10m",
+    });
+    return token;
+  }
+
+  verify(token: string): JsonWebToken.JwtPayload | string {
+    return JsonWebToken.verify(token, "secret");
+  }
+}
+
+export { AccessTokensService, RefreshTokensService, ForgotTokensService };
