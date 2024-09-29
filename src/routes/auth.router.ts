@@ -42,12 +42,12 @@ router.get(
   authenticationController.profile.bind(authenticationController),
 );
 
-router.get(
+router.post(
   "/forgot",
   authenticationController.forgot.bind(authenticationController),
 );
 
-router.get(
+router.put(
   "/reset/:token",
   authenticationController.reset.bind(authenticationController),
 );
