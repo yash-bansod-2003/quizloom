@@ -10,10 +10,10 @@ class RestaurantsController {
   ) {}
 
   async create(req: Request, res: Response) {
-    const user = await this.restaurantsService.create(
+    const restaurant = await this.restaurantsService.create(
       req.body as CreateRestaurantDto,
     );
-    res.json(user);
+    res.status(201).json(restaurant);
   }
 
   async findAll(req: Request, res: Response) {
