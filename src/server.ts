@@ -3,6 +3,7 @@ import express, { Express } from "express";
 import usersRouter from "@/routes/user.router";
 import authRouter from "@/routes/auth.router";
 import restaurantsRouter from "@/routes/restaurants.router";
+import globalErrorHandler from "@/middlewares/error-handler";
 
 export const createServer = (): Express => {
   const app = express();
@@ -18,7 +19,7 @@ export const createServer = (): Express => {
     })
     .use("/auth", authRouter)
     .use("/users", usersRouter)
-    .use("/restaurants", restaurantsRouter);
-
+    .use("/restaurants", restaurantsRouter)
+    .use(globalErrorHandler);
   return app;
 };

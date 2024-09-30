@@ -52,7 +52,7 @@ class AutenticationController {
 
     const payload: JsonWebToken.JwtPayload = {
       sub: String(user.id),
-      restaurantId: user?.restaurant.id ?? null,
+      restaurantId: user?.restaurant ? user?.restaurant.id : null,
       role: user.role,
     };
 

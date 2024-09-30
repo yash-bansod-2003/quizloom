@@ -13,7 +13,7 @@ class RestaurantsController {
     const restaurant = await this.restaurantsService.create(
       req.body as CreateRestaurantDto,
     );
-    res.status(201).json(restaurant);
+    return res.status(201).json(restaurant);
   }
 
   async findAll(req: Request, res: Response) {
@@ -25,7 +25,7 @@ class RestaurantsController {
     const restaurants = await this.restaurantsService.findOne({
       id: req.params.id,
     });
-    res.json(restaurants);
+    return res.json(restaurants);
   }
 
   async update(req: Request, res: Response) {
@@ -33,7 +33,7 @@ class RestaurantsController {
       { id: req.params.id },
       req.body as UpdateRestaurantDto,
     );
-    res.json(restaurant);
+    return res.json(restaurant);
   }
 
   async delete(req: Request, res: Response) {
