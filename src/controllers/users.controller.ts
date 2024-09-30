@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import UsersService from "@/services/user.service";
-import RestaurantsService from "@/services/restaurants.service";
+import RestaurantsService from "@/services/quizzes.service";
 import { CreateUserDto, UpdateUserDto } from "@/dto/users";
 import { Logger } from "winston";
 

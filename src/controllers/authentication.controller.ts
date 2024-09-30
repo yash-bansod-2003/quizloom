@@ -10,10 +10,10 @@ import { Logger } from "winston";
 
 class AutenticationController {
   constructor(
-    private userService: UserService,
-    private accessTokensService: TokensService,
-    private forgotPasswordTokensService: TokensService,
-    private logger: Logger,
+    private readonly userService: UserService,
+    private readonly accessTokensService: TokensService,
+    private readonly forgotPasswordTokensService: TokensService,
+    private readonly logger: Logger,
   ) {}
 
   async register(req: Request, res: Response, next: NextFunction) {
@@ -48,7 +48,6 @@ class AutenticationController {
 
     const payload: JsonWebToken.JwtPayload = {
       sub: String(user.id),
-      restaurantId: user?.restaurant ? user?.restaurant.id : null,
       role: user.role,
     };
 

@@ -1,5 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { Restaurant } from "./Restaurant";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { Quiz } from "@/entity/Quiz";
 
 @Entity()
 export class User {
@@ -21,6 +28,12 @@ export class User {
   @Column({ enum: ["user", "manager", "admin"], default: "user" })
   role: string;
 
-  @ManyToOne(() => Restaurant, (restaurant) => restaurant.users)
-  restaurant: Restaurant;
+  @CreateDateColumn()
+  created_at: number;
+
+  @UpdateDateColumn()
+  updated_at: number;
+
+  @OneToMany(() => Quiz, (quiz) => quiz.user)
+  quizzes: Quiz;
 }

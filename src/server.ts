@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import express, { Express } from "express";
-import usersRouter from "@/routes/user.router";
+import usersRouter from "@/routes/users.router";
 import authRouter from "@/routes/auth.router";
-import restaurantsRouter from "@/routes/restaurants.router";
+import quizzesRouter from "@/routes/quizzes.router";
 import globalErrorHandler from "@/middlewares/error-handler";
 
 export const createServer = (): Express => {
@@ -19,7 +19,7 @@ export const createServer = (): Express => {
     })
     .use("/auth", authRouter)
     .use("/users", usersRouter)
-    .use("/restaurants", restaurantsRouter)
+    .use("/quizzes", quizzesRouter)
     .use(globalErrorHandler);
   return app;
 };
