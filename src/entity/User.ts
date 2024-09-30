@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Quiz } from "@/entity/Quiz";
+import { Quiz } from "./Quiz";
 
 @Entity()
 export class User {

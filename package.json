@@ -11,8 +11,8 @@
       "prepare": "husky",
       "test": "jest",
       "typeorm": "typeorm-ts-node-commonjs",
-      "makemigrations": "typeorm migration:generate PostRefactoring -d src/data-source.ts",
-      "migrate": "typeorm migration:run -d src/data-source.ts"
+      "makemigrations": "cross-env NODE_ENV=development typeorm-ts-node-commonjs migration:generate --name $1 -d src/data-source.ts src/migration/--name $1",
+      "migrate": "cross-env NODE_ENV=development typeorm-ts-node-commonjs migration:run -d src/data-source.ts"
    },
    "keywords": [],
    "author": "",

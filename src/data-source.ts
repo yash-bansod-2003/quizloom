@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "@/entity/User";
-import { Quiz } from "@/entity/Quiz";
+import { User } from "./entity/User";
+import { Quiz } from "./entity/Quiz";
 import configuration from "./config/configuration";
 
 export const AppDataSource = new DataSource({
