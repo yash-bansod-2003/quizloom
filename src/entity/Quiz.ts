@@ -5,8 +5,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
 import { User } from "./User";
+import { Question } from "./Question";
 
 @Entity("quizzes")
 export class Quiz {
@@ -27,4 +29,7 @@ export class Quiz {
 
   @ManyToOne(() => User, (user) => user.quizzes)
   user: User;
+
+  @OneToMany(() => Question, (question) => question.quiz)
+  questions: Quiz;
 }
