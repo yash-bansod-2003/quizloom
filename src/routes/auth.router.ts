@@ -2,26 +2,26 @@
 import { Router } from "express";
 import AutenticationController from "@/controllers/authentication.controller";
 import UsersService from "@/services/user.service";
-import {
-  AccessTokensService,
-  ForgotTokensService,
-} from "@/services/tokens.service";
+import TokensService from "@/services/tokens.service";
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/User";
 import authenticationMiddleware from "@/middlewares/authenticate";
 import { userCreateValidator } from "@/validators/users.validators";
 import logger from "@/config/logger";
+import configuration from "@/config/configuration";
 
 const router = Router();
 
 const usersRepository = AppDataSource.getRepository(User);
-const accessTokensService = new AccessTokensService();
-const forgotTokensService = new ForgotTokensService();
+const accessTokensService = new TokensService(configuration.jwt.secret.access!);
+const forgotPasswordTokensService = new TokensService(
+  configuration.jwt.secret.forgot_password!,
+);
 const usersService = new UsersService(usersRepository);
 const authenticationController = new AutenticationController(
   usersService,
   accessTokensService,
-  forgotTokensService,
+  forgotPasswordTokensService,
   logger,
 );
 

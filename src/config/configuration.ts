@@ -12,7 +12,13 @@ const configuration = {
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE,
   },
-  jwks_uri: process.env.JWKS_URI,
+  jwt: {
+    secret: {
+      access: process.env.JWT_ACCESS_TOKEN_SECRET,
+      refresh: process.env.JWT_REFRESH_TOKEN_SECRET,
+      forgot_password: process.env.JWT_FORGOT_PASSWORD_TOKEN_SECRET,
+    },
+  },
 };
 
 export default configuration;
