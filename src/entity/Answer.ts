@@ -5,21 +5,19 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
 } from "typeorm";
-import { User } from "./User";
 import { Question } from "./Question";
 
-@Entity("quizzes")
-export class Quiz {
+@Entity("answers")
+export class Answer {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
+  text: string;
 
-  @Column()
-  description: string;
+  @Column({ default: false })
+  is_correct: boolean;
 
   @CreateDateColumn()
   created_at: number;
@@ -27,9 +25,6 @@ export class Quiz {
   @UpdateDateColumn()
   updated_at: number;
 
-  @ManyToOne(() => User, (user) => user.quizzes)
-  user: User;
-
-  @OneToMany(() => Question, (question) => question.quiz)
-  questions: Question[];
+  @ManyToOne(() => Question, (question) => question.answers)
+  question: Question;
 }

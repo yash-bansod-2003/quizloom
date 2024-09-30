@@ -35,5 +35,5 @@ export class User {
   updated_at: number;
 
   @OneToMany(() => Quiz, (quiz) => quiz.user)
-  quizzes: Quiz;
+  quizzes: Quiz[];
 }
