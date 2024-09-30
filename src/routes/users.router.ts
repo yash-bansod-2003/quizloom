@@ -2,10 +2,10 @@
 import { Router } from "express";
 import UsersController from "@/controllers/users.controller";
 import UsersService from "@/services/user.service";
-import RestaurantsService from "@/services/restaurants.service";
+import RestaurantsService from "@/services/quizzes.service";
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/User";
-import { Restaurant } from "@/entity/Restaurant";
+import { Quiz } from "@/entity/Quiz";
 import authenticate from "@/middlewares/authenticate";
 import authorization from "@/middlewares/authorization";
 import logger from "@/config/logger";
@@ -13,9 +13,9 @@ import logger from "@/config/logger";
 const router = Router();
 
 const usersRepository = AppDataSource.getRepository(User);
-const restaurantsRepository = AppDataSource.getRepository(Restaurant);
+const quizzesRepository = AppDataSource.getRepository(Quiz);
 const usersService = new UsersService(usersRepository);
-const restaurantsService = new RestaurantsService(restaurantsRepository);
+const restaurantsService = new RestaurantsService(quizzesRepository);
 const usersController = new UsersController(
   usersService,
   restaurantsService,

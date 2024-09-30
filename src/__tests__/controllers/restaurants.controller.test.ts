@@ -2,7 +2,7 @@ import supertest from "supertest";
 import { App } from "supertest/types";
 import createJWKSMock from "mock-jwks";
 import { createServer } from "@/server";
-import { CreateRestaurantDto } from "@/dto/restaurants";
+import { CreateRestaurantDto } from "@/dto/quizzes";
 import configuration from "@/config/configuration";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "@/data-source";
