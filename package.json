@@ -10,7 +10,9 @@
       "format": "npx prettier ./src --write",
       "prepare": "husky",
       "test": "jest",
-      "typeorm": "typeorm-ts-node-commonjs"
+      "typeorm": "typeorm-ts-node-commonjs",
+      "makemigrations": "typeorm migration:generate PostRefactoring -d src/data-source.ts",
+      "migrate": "typeorm migration:run -d src/data-source.ts"
    },
    "keywords": [],
    "author": "",

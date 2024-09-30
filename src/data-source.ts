@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
   username: configuration.database.user,
   password: configuration.database.password,
   database: configuration.database.database,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [User, Quiz],
   migrations: [],
