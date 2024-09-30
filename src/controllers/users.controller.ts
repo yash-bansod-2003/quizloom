@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import UserService from "@/services/user.service";
+import UsersService from "@/services/user.service";
 import RestaurantsService from "@/services/restaurants.service";
 import { CreateUserDto, UpdateUserDto } from "@/dto/users";
 import { Logger } from "winston";
 
 class UsersController {
   constructor(
-    private userService: UserService,
+    private usersService: UsersService,
     private restaurantsService: RestaurantsService,
     private logger: Logger,
   ) {}
@@ -23,7 +23,7 @@ class UsersController {
       });
     }
 
-    const user = await this.userService.create({
+    const user = await this.usersService.create({
       ...rest,
       restaurant,
     });
@@ -31,12 +31,12 @@ class UsersController {
   }
 
   async findAll(req: Request, res: Response) {
-    const users = await this.userService.findAll();
+    const users = await this.usersService.findAll();
     return res.json(users);
   }
 
   async findOne(req: Request, res: Response) {
-    const user = await this.userService.findOne({ id: req.params.id });
+    const user = await this.usersService.findOne({ id: req.params.id });
     res.json(user);
   }
 
@@ -45,7 +45,7 @@ class UsersController {
     const restaurant = await this.restaurantsService.findOne({
       id: restaurantId as unknown as string,
     });
-    const user = await this.userService.update(
+    const user = await this.usersService.update(
       { id: req.params.id },
       {
         ...rest,
@@ -56,7 +56,7 @@ class UsersController {
   }
 
   async delete(req: Request, res: Response) {
-    const user = await this.userService.delete({ id: req.params.id });
+    const user = await this.usersService.delete({ id: req.params.id });
     return res.json(user);
   }
 }

@@ -2,10 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import JsonWebToken from "jsonwebtoken";
 import UserService from "@/services/user.service";
-import {
-  AccessTokensService,
-  ForgotTokensService,
-} from "@/services/tokens.service";
+import TokensService from "@/services/tokens.service";
 import { CreateUserDto } from "@/dto/users";
 import { ForgotPasswordDto, ResetPasswordDto } from "@/dto/autentication";
 import { AuthenticatedRequest } from "@/middlewares/authenticate";
@@ -14,8 +11,8 @@ import { Logger } from "winston";
 class AutenticationController {
   constructor(
     private userService: UserService,
-    private accessTokensService: AccessTokensService,
-    private forgotTokensService: ForgotTokensService,
+    private accessTokensService: TokensService,
+    private forgotPasswordTokensService: TokensService,
     private logger: Logger,
   ) {}
 
@@ -56,7 +53,7 @@ class AutenticationController {
     };
 
     this.logger.debug("generating access token");
-    const accessToken = this.accessTokensService.generate(payload);
+    const accessToken = this.accessTokensService.sign(payload);
 
     this.logger.debug("login user successfully");
     return res.json({ accessToken });
@@ -81,14 +78,14 @@ class AutenticationController {
       role: user.role,
       email: user.email,
     };
-    const token = this.forgotTokensService.generate(payload);
+    const token = this.forgotPasswordTokensService.sign(payload);
 
     return res.json({ token });
   }
 
   async reset(req: Request, res: Response, next: NextFunction) {
     const { token } = req.params;
-    const match = this.forgotTokensService.verify(token);
+    const match = this.forgotPasswordTokensService.verify(token);
     if (!match) {
       return next(createError.InternalServerError());
     }
