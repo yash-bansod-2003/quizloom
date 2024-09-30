@@ -1,4 +1,5 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import createError from "http-errors";
 import JsonWebToken from "jsonwebtoken";
 import UserService from "@/services/user.service";
 import {
@@ -18,13 +19,13 @@ class AutenticationController {
     private logger: Logger,
   ) {}
 
-  async register(req: Request, res: Response) {
+  async register(req: Request, res: Response, next: NextFunction) {
     const { email, ...rest } = req.body as CreateUserDto;
     this.logger.debug(`initiate registering user ${email}`);
     const userExists = await this.userService.findOne({ email });
     if (userExists) {
       this.logger.debug(`user already exists with ${email} email`);
-      return res.json({ message: "user already exists" });
+      return next(createError.Conflict("user already exists"));
     }
     this.logger.debug("registering user");
     const user = await this.userService.create({ email, ...rest });
@@ -32,22 +33,20 @@ class AutenticationController {
     res.json(user);
   }
 
-  async login(req: Request, res: Response) {
+  async login(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body as CreateUserDto;
+    this.logger.debug(`initiate login user ${email}`);
     const user = await this.userService.findOne({
       email,
     });
 
     if (!user) {
-      return res.status(400).json({
-        message: "user not found",
-      });
+      return next(createError.NotFound("user not found"));
     }
 
+    this.logger.debug("verifying password");
     if (user.password !== password) {
-      return res.status(400).json({
-        message: "wrong credentials",
-      });
+      return next(createError.UnprocessableEntity("invalid credentials"));
     }
 
     const payload: JsonWebToken.JwtPayload = {
@@ -56,24 +55,26 @@ class AutenticationController {
       role: user.role,
     };
 
+    this.logger.debug("generating access token");
     const accessToken = this.accessTokensService.generate(payload);
 
+    this.logger.debug("login user successfully");
     return res.json({ accessToken });
   }
-  async profile(req: Request, res: Response) {
+  async profile(req: Request, res: Response, next: NextFunction) {
     const id = (req as AuthenticatedRequest).user.sub;
     const user = await this.userService.findOne({ id });
     if (!user) {
-      return res.status(400).json({ message: "user not found" });
+      return next(createError.NotFound("user not found"));
     }
     return res.json(user);
   }
 
-  async forgot(req: Request, res: Response) {
+  async forgot(req: Request, res: Response, next: NextFunction) {
     const { email } = req.body as ForgotPasswordDto;
     const user = await this.userService.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "user not found" });
+      return next(createError.NotFound("user not found"));
     }
     const payload: JsonWebToken.JwtPayload = {
       sub: String(user.id),
@@ -85,11 +86,11 @@ class AutenticationController {
     return res.json({ token });
   }
 
-  async reset(req: Request, res: Response) {
+  async reset(req: Request, res: Response, next: NextFunction) {
     const { token } = req.params;
     const match = this.forgotTokensService.verify(token);
     if (!match) {
-      return res.status(500).json({ message: "internal server error" });
+      return next(createError.InternalServerError());
     }
     const { email } = match as JsonWebToken.JwtPayload;
 
@@ -98,7 +99,7 @@ class AutenticationController {
     });
 
     if (!userExists) {
-      return res.status(404).json({ message: "user not found" });
+      return next(createError.NotFound("user not found"));
     }
 
     const { password } = req.body as ResetPasswordDto;
@@ -111,7 +112,7 @@ class AutenticationController {
     );
 
     if (!user) {
-      return res.status(500).json({ message: "internal server error" });
+      return next(createError.InternalServerError());
     }
 
     return res.json(user);
