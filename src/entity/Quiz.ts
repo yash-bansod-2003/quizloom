@@ -10,6 +10,7 @@ import {
 import { User } from "./User";
 import { Question } from "./Question";
 import { Submission } from "./Submission";
+import { Result } from "./Result";
 
 @Entity("quizzes")
 export class Quiz {
@@ -36,4 +37,7 @@ export class Quiz {
 
   @OneToMany(() => Submission, (submission) => submission.quiz)
   submissions: Submission[];
+
+  @OneToMany(() => Result, (result) => result.user)
+  results: Result[];
 }

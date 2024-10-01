@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { Quiz } from "./Quiz";
 import { Submission } from "./Submission";
+import { Result } from "./Result";
 
 @Entity()
 export class User {
@@ -40,4 +41,7 @@ export class User {
 
   @OneToMany(() => Submission, (submission) => submission.user)
   submissions: Submission[];
+
+  @OneToMany(() => Result, (result) => result.user)
+  results: Result[];
 }
