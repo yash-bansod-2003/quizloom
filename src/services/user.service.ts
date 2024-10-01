@@ -3,7 +3,7 @@ import { DeepPartial, DeleteResult, Repository, UpdateResult } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
 class UserService {
-  constructor(private usersRepository: Repository<User>) {}
+  constructor(private readonly usersRepository: Repository<User>) {}
   async create(createUserDto: DeepPartial<User>) {
     return await this.usersRepository.save(createUserDto);
   }
@@ -15,7 +15,6 @@ class UserService {
   findOne(expression: Record<string, string>): Promise<User | null> {
     return this.usersRepository.findOne({
       where: expression,
-      relations: { restaurant: true },
     });
   }
 

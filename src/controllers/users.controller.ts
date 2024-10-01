@@ -6,27 +6,13 @@ import { Logger } from "winston";
 
 class UsersController {
   constructor(
-    private usersService: UsersService,
-    private restaurantsService: RestaurantsService,
-    private logger: Logger,
+    private readonly usersService: UsersService,
+    private readonly restaurantsService: RestaurantsService,
+    private readonly logger: Logger,
   ) {}
 
   async create(req: Request, res: Response) {
-    const { restaurantId, ...rest } = req.body as CreateUserDto;
-    const restaurant = await this.restaurantsService.findOne({
-      id: restaurantId as unknown as string,
-    });
-
-    if (!restaurant) {
-      return res.status(400).json({
-        message: "restaurant not found",
-      });
-    }
-
-    const user = await this.usersService.create({
-      ...rest,
-      restaurant,
-    });
+    const user = await this.usersService.create(req.body as CreateUserDto);
     res.json(user);
   }
 
@@ -41,16 +27,9 @@ class UsersController {
   }
 
   async update(req: Request, res: Response) {
-    const { restaurantId, ...rest } = req.body as UpdateUserDto;
-    const restaurant = await this.restaurantsService.findOne({
-      id: restaurantId as unknown as string,
-    });
     const user = await this.usersService.update(
       { id: req.params.id },
-      {
-        ...rest,
-        restaurant: restaurant as never,
-      },
+      req.body as UpdateUserDto,
     );
     res.json(user);
   }
