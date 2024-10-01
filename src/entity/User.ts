@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Quiz } from "./Quiz";
+import { Submission } from "./Submission";
 
 @Entity()
 export class User {
@@ -36,4 +37,7 @@ export class User {
 
   @OneToMany(() => Quiz, (quiz) => quiz.user)
   quizzes: Quiz[];
+
+  @OneToMany(() => Submission, (submission) => submission.user)
+  submissions: Submission[];
 }
