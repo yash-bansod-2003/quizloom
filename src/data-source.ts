@@ -18,6 +18,6 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   logging: false,
   entities: [User, Quiz, Question, Answer, Submission, Result],
-  migrations: [],
+  migrations: ["src/migration/*.{ts,js}"],
   subscribers: [],
 });
