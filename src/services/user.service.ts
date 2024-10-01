@@ -12,7 +12,7 @@ class UserService {
     return this.usersRepository.find();
   }
 
-  findOne(expression: Record<string, string>): Promise<User | null> {
+  findOne(expression: Record<string, string | number>): Promise<User | null> {
     return this.usersRepository.findOne({
       where: expression,
     });
