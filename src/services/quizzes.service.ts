@@ -12,7 +12,7 @@ class QuizzesService {
     return this.quizzesRepository.find({ relations: { user: true } });
   }
 
-  findOne(expression: Record<string, string>): Promise<Quiz | null> {
+  findOne(expression: Record<string, unknown>): Promise<Quiz | null> {
     return this.quizzesRepository.findOneBy(expression);
   }
 
