@@ -5,7 +5,7 @@
    "scripts": {
       "dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
       "start": "cross-env NODE_ENV=production node dist/src/index.js",
-      "build": "swc src -d dist --ignore **/*.test.ts",
+      "build": "swc src -d dist --ignore **/*.test.ts migration/*.ts",
       "lint": "npx eslint ./src",
       "format": "npx prettier ./src --write",
       "prepare": "husky",

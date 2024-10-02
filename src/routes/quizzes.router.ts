@@ -6,7 +6,6 @@ import UsersService from "@/services/user.service";
 import { AppDataSource } from "@/data-source";
 import { Quiz } from "@/entity/Quiz";
 import authenticate from "@/middlewares/authenticate";
-import authorization from "@/middlewares/authorization";
 import logger from "@/config/logger";
 import { QuizCreateValidator } from "@/validators/quizzes.validator";
 import { User } from "@/entity/User";
@@ -26,7 +25,6 @@ const quizzesController = new QuizzesController(
 router.post(
   "/",
   authenticate,
-  authorization(["admin", "manager"]),
   QuizCreateValidator,
   quizzesController.create.bind(quizzesController),
 );
@@ -34,28 +32,24 @@ router.post(
 router.get(
   "/",
   authenticate,
-  authorization(["admin", "manager"]),
   quizzesController.findAll.bind(quizzesController),
 );
 
 router.get(
   "/:id",
   authenticate,
-  authorization(["admin", "manager"]),
   quizzesController.findOne.bind(quizzesController),
 );
 
 router.put(
   "/:id",
   authenticate,
-  authorization(["admin", "manager"]),
   quizzesController.update.bind(quizzesController),
 );
 
 router.delete(
   "/:id",
   authenticate,
-  authorization(["admin", "manager"]),
   quizzesController.delete.bind(quizzesController),
 );
 
