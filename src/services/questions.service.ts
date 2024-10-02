@@ -15,7 +15,10 @@ class QuestionsService {
   }
 
   findOne(expression: Record<string, unknown>): Promise<Question | null> {
-    return this.questionsRepository.findOneBy(expression);
+    return this.questionsRepository.findOne({
+      where: expression,
+      relations: { quiz: true, answers: true },
+    });
   }
 
   update(
