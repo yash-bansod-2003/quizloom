@@ -11,21 +11,26 @@ import QuizzesService from "@/services/quizzes.service";
 import { Result } from "@/entity/Result";
 import ResultsService from "@/services/results.service";
 import ResultsController from "@/controllers/results.controller";
+import { Submission } from "@/entity/Submission";
+import SubmissionsService from "@/services/submissions.service";
 
 const router = Router();
 
 const usersRepository = AppDataSource.getRepository(User);
 const quizzesRepository = AppDataSource.getRepository(Quiz);
 const resultsRepository = AppDataSource.getRepository(Result);
+const submissionsRepository = AppDataSource.getRepository(Submission);
 
 const usersService = new UserService(usersRepository);
 const quizzessService = new QuizzesService(quizzesRepository);
 const resultsService = new ResultsService(resultsRepository);
+const submissionsService = new SubmissionsService(submissionsRepository);
 
 const resultsController = new ResultsController(
   resultsService,
   usersService,
   quizzessService,
+  submissionsService,
   logger,
 );
 
