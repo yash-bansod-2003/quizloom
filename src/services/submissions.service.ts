@@ -7,13 +7,17 @@ class SubmissionsService {
     return await this.submissionsRepository.save(createSubmissionDto);
   }
 
-  findAll(): Promise<Submission[]> {
-    return this.submissionsRepository.find();
+  findAll(expression: Record<string, unknown> = {}): Promise<Submission[]> {
+    return this.submissionsRepository.find({
+      where: expression,
+      relations: { answer: true },
+    });
   }
 
   findOne(expression: Record<string, unknown>): Promise<Submission | null> {
     return this.submissionsRepository.findOne({
       where: expression,
+      relations: { answer: true },
     });
   }
 
