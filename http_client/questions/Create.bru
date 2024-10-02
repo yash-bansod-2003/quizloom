@@ -1,15 +1,23 @@
 meta {
-  name: Find One
+  name: Create
   type: http
-  seq: 2
+  seq: 1
 }
 
-get {
-  url: http://localhost:5001/quizzes/1
-  body: none
+post {
+  url: http://localhost:5001/questions
+  body: json
   auth: bearer
 }
 
 auth:bearer {
   token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3Mjc4NjcwMzV9.EblhUijUGNgfXuFYChIS2w7TJFQohjxFZDRj9yCfQPE
+}
+
+body:json {
+  {
+    "text": "question 01",
+    "type": "mcq",
+    "quizId" : 1
+  }
 }
