@@ -6,6 +6,7 @@ import quizzesRouter from "@/routes/quizzes.router";
 import questionsRouter from "@/routes/questions.router";
 import answersRouter from "@/routes/answers.router";
 import submissionsRouter from "@/routes/submissions.router";
+import resultsRouter from "@/routes/results.router";
 
 import globalErrorHandler from "@/middlewares/error-handler";
 
@@ -27,6 +28,7 @@ export const createServer = (): Express => {
     .use("/questions", questionsRouter)
     .use("/answers", answersRouter)
     .use("/submissions", submissionsRouter)
+    .use("/results", resultsRouter)
     .use(globalErrorHandler);
   return app;
 };
