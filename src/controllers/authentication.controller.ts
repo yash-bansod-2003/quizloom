@@ -50,9 +50,11 @@ class AutenticationController {
       sub: String(user.id),
       role: user.role,
     };
-
+    const tokenOptions: JsonWebToken.SignOptions = {
+      expiresIn: "30m",
+    };
     this.logger.debug("generating access token");
-    const accessToken = this.accessTokensService.sign(payload);
+    const accessToken = this.accessTokensService.sign(payload, tokenOptions);
 
     this.logger.debug("login user successfully");
     return res.json({ accessToken });
@@ -77,7 +79,10 @@ class AutenticationController {
       role: user.role,
       email: user.email,
     };
-    const token = this.forgotPasswordTokensService.sign(payload);
+    const tokenOptions: JsonWebToken.SignOptions = {
+      expiresIn: "10m",
+    };
+    const token = this.forgotPasswordTokensService.sign(payload, tokenOptions);
 
     return res.json({ token });
   }
