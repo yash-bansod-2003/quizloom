@@ -4,6 +4,7 @@ import UsersService from "@/services/user.service";
 import { CreateQuizDto, UpdateQuizDto } from "@/dto/quizzes";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
+import { AuthenticatedRequest } from "@/middlewares/authenticate";
 
 class QuizzesController {
   constructor(
@@ -13,39 +14,64 @@ class QuizzesController {
   ) {}
 
   async create(req: Request, res: Response, next: NextFunction) {
-    const { userId, ...rest } = req.body as CreateQuizDto;
+    const createQuizDto = req.body as CreateQuizDto;
+    const userId = (req as AuthenticatedRequest).user.sub;
     const user = await this.usersService.findOne({ id: userId });
 
     if (!user) {
       return next(createHttpError.NotFound());
     }
-    const quiz = await this.quizzesService.create({ ...rest, user });
+    const quiz = await this.quizzesService.create({ ...createQuizDto, user });
     return res.status(201).json(quiz);
   }
 
-  async findAll(req: Request, res: Response) {
-    const quizzes = await this.quizzesService.findAll();
-    return res.json(quizzes);
-  }
-
-  async findOne(req: Request, res: Response) {
-    const quizzes = await this.quizzesService.findOne({
-      id: req.params.id,
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    const userId = (req as AuthenticatedRequest).user.sub;
+    const user = await this.usersService.findOne({ id: userId });
+    if (!user) {
+      return next(createHttpError.NotFound());
+    }
+    const quizzes = await this.quizzesService.findAll({
+      user: { id: user.id },
     });
     return res.json(quizzes);
   }
 
-  async update(req: Request, res: Response) {
+  async findOne(req: Request, res: Response, next: NextFunction) {
+    const userId = (req as AuthenticatedRequest).user.sub;
+    const user = await this.usersService.findOne({ id: userId });
+    if (!user) {
+      return next(createHttpError.NotFound());
+    }
+    const quiz = await this.quizzesService.findOne({
+      id: req.params.id,
+      user: { id: user.id },
+    });
+    return res.json(quiz);
+  }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    const userId = (req as AuthenticatedRequest).user.sub;
+    const user = await this.usersService.findOne({ id: userId });
+    if (!user) {
+      return next(createHttpError.NotFound());
+    }
     const quiz = await this.quizzesService.update(
-      { id: req.params.id },
+      { id: req.params.id, user: { id: user.id } },
       req.body as UpdateQuizDto,
     );
     return res.json(quiz);
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: Request, res: Response, next: NextFunction) {
+    const userId = (req as AuthenticatedRequest).user.sub;
+    const user = await this.usersService.findOne({ id: userId });
+    if (!user) {
+      return next(createHttpError.NotFound());
+    }
     const quiz = await this.quizzesService.delete({
       id: req.params.id,
+      user: { id: user.id },
     });
     return res.json(quiz);
   }

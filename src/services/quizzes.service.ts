@@ -8,22 +8,28 @@ class QuizzesService {
     return await this.quizzesRepository.save(createQuizDto);
   }
 
-  findAll(): Promise<Quiz[]> {
-    return this.quizzesRepository.find({ relations: { user: true } });
+  findAll(expression: Record<string, unknown>): Promise<Quiz[]> {
+    return this.quizzesRepository.find({
+      where: expression,
+      relations: { user: true },
+    });
   }
 
   findOne(expression: Record<string, unknown>): Promise<Quiz | null> {
-    return this.quizzesRepository.findOneBy(expression);
+    return this.quizzesRepository.findOne({
+      where: expression,
+      relations: { user: true },
+    });
   }
 
   update(
-    expression: Record<string, string>,
+    expression: Record<string, unknown>,
     updateQuizDto: QueryDeepPartialEntity<Quiz>,
   ): Promise<UpdateResult> {
     return this.quizzesRepository.update(expression, updateQuizDto);
   }
 
-  delete(expression: Record<string, string>): Promise<DeleteResult> {
+  delete(expression: Record<string, unknown>): Promise<DeleteResult> {
     return this.quizzesRepository.delete(expression);
   }
 }
