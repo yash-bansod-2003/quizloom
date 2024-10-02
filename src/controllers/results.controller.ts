@@ -6,11 +6,13 @@ import createHttpError from "http-errors";
 import QuizzesService from "@/services/quizzes.service";
 import UserService from "@/services/user.service";
 import { AuthenticatedRequest } from "@/middlewares/authenticate";
+import SubmissionsService from "@/services/submissions.service";
 class ResultsController {
   constructor(
     private readonly resultsService: ResultsService,
     private readonly usersService: UserService,
     private readonly quizzesService: QuizzesService,
+    private readonly submissionsService: SubmissionsService,
     private readonly logger: Logger,
   ) {}
 
@@ -28,11 +30,23 @@ class ResultsController {
     if (!quiz) {
       return next(createHttpError.NotFound("quiz not found"));
     }
+    const submissions = await this.submissionsService.findAll({
+      user: { id: user.id },
+      quiz: { id: quiz.id },
+    });
+
+    if (!submissions) {
+      return next(createHttpError.NotFound("submissions not found"));
+    }
+
+    const score = submissions.reduce((acc, submission) => {
+      return acc + (submission.answer.is_correct ? 1 : 0);
+    }, 0);
 
     const Result = await this.resultsService.create({
       user,
       quiz,
-      score: 0,
+      score,
     });
     return res.status(201).json(Result);
   }
