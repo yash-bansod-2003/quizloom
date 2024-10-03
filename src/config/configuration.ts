@@ -19,6 +19,9 @@ const configuration = {
       forgot_password: process.env.JWT_FORGOT_PASSWORD_TOKEN_SECRET,
     },
   },
+  ai: {
+    key: process.env.GEMINIAI_API_KEY,
+  },
 };
 
 export default configuration;

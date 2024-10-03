@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import QuizzesService from "@/services/quizzes.service";
 import UsersService from "@/services/user.service";
+import AiService from "@/services/ai.service";
 import { CreateQuizDto, UpdateQuizDto } from "@/dto/quizzes";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
@@ -10,6 +11,7 @@ class QuizzesController {
   constructor(
     private readonly quizzesService: QuizzesService,
     private readonly usersService: UsersService,
+    private readonly aiService: AiService,
     private readonly logger: Logger,
   ) {}
 
@@ -23,6 +25,18 @@ class QuizzesController {
     }
     const quiz = await this.quizzesService.create({ ...createQuizDto, user });
     return res.status(201).json(quiz);
+  }
+
+  async generate(req: Request, res: Response, next: NextFunction) {
+    const createQuizDto = req.body as CreateQuizDto;
+    const userId = (req as AuthenticatedRequest).user.sub;
+    const user = await this.usersService.findOne({ id: userId });
+
+    if (!user) {
+      return next(createHttpError.NotFound());
+    }
+    const quiz = await this.aiService.generateQuiz(createQuizDto);
+    return res.status(200).json(quiz);
   }
 
   async findAll(req: Request, res: Response, next: NextFunction) {
