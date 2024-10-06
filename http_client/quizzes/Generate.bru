@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:5001/quizzes
+  url: http://localhost:5001/quizzes/generate
   body: json
   auth: bearer
 }
@@ -16,7 +16,7 @@ auth:bearer {
 
 body:json {
   {
-    "name" : "General Science Quiz",
-    "description" : "Test your knowledge of fundamental scientific concepts in physics, chemistry, and biology with this quick quiz!"
+    "name" : "computer components",
+    "description" : "introduce components of computers"
   }
 }
