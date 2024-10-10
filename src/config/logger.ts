@@ -24,9 +24,7 @@ const logger = createLogger({
       filename: "errors.log",
       level: "error",
       format: format.combine(format.timestamp(), format.simple()),
-      silent:
-        configuration.node_env === "test" ||
-        configuration.node_env === "development",
+      silent: configuration.node_env === "test",
     }),
   ],
 });
