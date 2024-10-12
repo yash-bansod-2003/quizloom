@@ -22,6 +22,6 @@ export const SubmissionCreateValidator = (
     validationSchema.parse(req.body);
     next();
   } catch (error) {
-    return res.json(error);
+    return next(error);
   }
 };
