@@ -10,7 +10,7 @@ import { Question } from "@/entity/Question";
 import { Answer } from "@/entity/Answer";
 import { User } from "@/entity/User";
 import { Quiz } from "@/entity/Quiz";
-import UserService from "@/services/user.service";
+import UserService from "@/services/users.service";
 import QuizzesService from "@/services/quizzes.service";
 import { Submission } from "@/entity/Submission";
 import SubmissionsService from "@/services/submissions.service";

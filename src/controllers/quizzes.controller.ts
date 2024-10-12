@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import QuizzesService from "@/services/quizzes.service";
-import UsersService from "@/services/user.service";
+import UsersService from "@/services/users.service";
 import AiService from "@/services/ai.service";
 import { CreateQuizDto, UpdateQuizDto } from "@/dto/quizzes";
 import { Logger } from "winston";
@@ -17,8 +17,8 @@ class QuizzesController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     const createQuizDto = req.body as CreateQuizDto;
-    const userId = (req as AuthenticatedRequest).user.sub;
-    const user = await this.usersService.findOne({ id: userId });
+    const userId = Number((req as AuthenticatedRequest).user.sub);
+    const user = await this.usersService.findOne({ where: { id: userId } });
 
     if (!user) {
       return next(createHttpError.NotFound());
@@ -30,7 +30,9 @@ class QuizzesController {
   async generate(req: Request, res: Response, next: NextFunction) {
     const createQuizDto = req.body as CreateQuizDto;
     const userId = (req as AuthenticatedRequest).user.sub;
-    const user = await this.usersService.findOne({ id: userId });
+    const user = await this.usersService.findOne({
+      where: { id: Number(userId) },
+    });
 
     if (!user) {
       return next(createHttpError.NotFound());
@@ -41,7 +43,9 @@ class QuizzesController {
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     const userId = (req as AuthenticatedRequest).user.sub;
-    const user = await this.usersService.findOne({ id: userId });
+    const user = await this.usersService.findOne({
+      where: { id: Number(userId) },
+    });
     if (!user) {
       return next(createHttpError.NotFound());
     }
@@ -53,7 +57,9 @@ class QuizzesController {
 
   async findOne(req: Request, res: Response, next: NextFunction) {
     const userId = (req as AuthenticatedRequest).user.sub;
-    const user = await this.usersService.findOne({ id: userId });
+    const user = await this.usersService.findOne({
+      where: { id: Number(userId) },
+    });
     if (!user) {
       return next(createHttpError.NotFound());
     }
@@ -66,7 +72,9 @@ class QuizzesController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     const userId = (req as AuthenticatedRequest).user.sub;
-    const user = await this.usersService.findOne({ id: userId });
+    const user = await this.usersService.findOne({
+      where: { id: Number(userId) },
+    });
     if (!user) {
       return next(createHttpError.NotFound());
     }
@@ -79,7 +87,9 @@ class QuizzesController {
 
   async delete(req: Request, res: Response, next: NextFunction) {
     const userId = (req as AuthenticatedRequest).user.sub;
-    const user = await this.usersService.findOne({ id: userId });
+    const user = await this.usersService.findOne({
+      where: { id: Number(userId) },
+    });
     if (!user) {
       return next(createHttpError.NotFound());
     }

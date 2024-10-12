@@ -1,5 +1,7 @@
 import "reflect-metadata";
 import express, { Express } from "express";
+import helmet from "helmet";
+import morgan from "morgan";
 import usersRouter from "@/routes/users.router";
 import authRouter from "@/routes/auth.router";
 import quizzesRouter from "@/routes/quizzes.router";
@@ -13,7 +15,9 @@ import globalErrorHandler from "@/middlewares/error-handler";
 export const createServer = (): Express => {
   const app = express();
   app
-    .disable("x-powered-by")
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    .use(helmet({ contentSecurityPolicy: false }))
+    .use(morgan("dev"))
     .use(express.json())
     .use(express.static("public"))
     .get("/status", (_, res) => {

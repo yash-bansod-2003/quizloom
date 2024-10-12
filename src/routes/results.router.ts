@@ -6,7 +6,7 @@ import logger from "@/config/logger";
 import { ResultCreateValidator } from "@/validators/results.validator";
 import { User } from "@/entity/User";
 import { Quiz } from "@/entity/Quiz";
-import UserService from "@/services/user.service";
+import UserService from "@/services/users.service";
 import QuizzesService from "@/services/quizzes.service";
 import { Result } from "@/entity/Result";
 import ResultsService from "@/services/results.service";

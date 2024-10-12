@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from "express";
 import AutenticationController from "@/controllers/authentication.controller";
-import UsersService from "@/services/user.service";
+import UsersService from "@/services/users.service";
 import TokensService from "@/services/tokens.service";
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/User";
