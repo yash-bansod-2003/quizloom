@@ -7,17 +7,19 @@ import { CreateUserDto } from "@/dto/users";
 import { ForgotPasswordDto, ResetPasswordDto } from "@/dto/autentication";
 import { AuthenticatedRequest } from "@/middlewares/authenticate";
 import { Logger } from "winston";
+import HashingService from "@/services/hashing.service";
 
 class AutenticationController {
   constructor(
     private readonly userService: UserService,
+    private readonly hashingService: HashingService,
     private readonly accessTokensService: TokensService,
     private readonly forgotPasswordTokensService: TokensService,
     private readonly logger: Logger,
   ) {}
 
   async register(req: Request, res: Response, next: NextFunction) {
-    const { email, ...rest } = req.body as CreateUserDto;
+    const { email, password, ...rest } = req.body as CreateUserDto;
     this.logger.debug(`initiate registering user ${email}`);
     try {
       const userExists = await this.userService.findOne({ where: { email } });
@@ -25,10 +27,16 @@ class AutenticationController {
         this.logger.debug(`user already exists with ${email} email`);
         return next(createError.Conflict("user already exists"));
       }
+      this.logger.debug("hashing user password");
+      const hashPassword = await this.hashingService.hash(password);
       this.logger.debug("registering user");
-      const user = await this.userService.create({ email, ...rest });
+      const user = await this.userService.create({
+        email,
+        password: hashPassword,
+        ...rest,
+      });
       this.logger.debug("user registered successfully");
-      res.json(user);
+      res.json({ ...user, password: undefined });
     } catch (error) {
       this.logger.error("register user failed", error);
       next(createError.InternalServerError());
@@ -49,7 +57,7 @@ class AutenticationController {
       }
 
       this.logger.debug("verifying password");
-      if (user.password !== password) {
+      if (!(await this.hashingService.compare(password, user.password))) {
         this.logger.debug("invalid credentials");
         return next(createError.UnprocessableEntity("invalid credentials"));
       }
@@ -83,7 +91,7 @@ class AutenticationController {
         return next(createError.NotFound("user not found"));
       }
       this.logger.debug("profile user successfully");
-      return res.json(user);
+      return res.json({ ...user, password: undefined });
     } catch (error) {
       this.logger.error("profile user failed", error);
       next(createError.InternalServerError());

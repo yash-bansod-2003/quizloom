@@ -3,6 +3,7 @@ import { Router } from "express";
 import AutenticationController from "@/controllers/authentication.controller";
 import UsersService from "@/services/users.service";
 import TokensService from "@/services/tokens.service";
+import HashingService from "@/services/hashing.service";
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/User";
 import authenticationMiddleware from "@/middlewares/authenticate";
@@ -18,8 +19,10 @@ const forgotPasswordTokensService = new TokensService(
   configuration.jwt.secret.forgot_password!,
 );
 const usersService = new UsersService(usersRepository);
+const hashingService = new HashingService();
 const authenticationController = new AutenticationController(
   usersService,
+  hashingService,
   accessTokensService,
   forgotPasswordTokensService,
   logger,
