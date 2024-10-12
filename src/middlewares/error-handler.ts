@@ -2,10 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import { HttpError } from "http-errors";
 import { ZodError } from "zod";
 import { TokenExpiredError } from "jsonwebtoken";
-
+import zodErrorAdapter from "@/adapters/error/zod.error";
+import httpErrorAdapter from "@/adapters/error/http.error";
+import configuration from "@/config/configuration";
 export interface ErrorResponse {
-  issues: Array<Record<string, string>>;
   name: string;
+  code: number;
+  errors: unknown[];
+  stack?: string;
 }
 
 const errorHandler = (
@@ -15,49 +19,41 @@ const errorHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _: NextFunction,
 ) => {
-  let errorResponse: ErrorResponse;
+  let errorResponse: ErrorResponse | undefined = undefined;
+
+  errorResponse = {
+    name: "Internal Server Error",
+    code: 500,
+    errors: [
+      {
+        message: "Internal Server Error",
+        path: "",
+      },
+    ],
+    ...(configuration.node_env !== "production" && { stack: err.stack }),
+  };
 
   if (err instanceof ZodError) {
-    errorResponse = {
-      issues: err.issues as unknown as Array<Record<string, string>>,
-      name: err.name,
-    };
-  } else if (err instanceof TokenExpiredError) {
-    errorResponse = {
-      issues: [
-        {
-          path: "",
-          message: err.message,
-          code: "TOKEN_EXPIRED",
-        },
-      ],
-      name: err.name,
-    };
-  } else if (err instanceof HttpError) {
-    errorResponse = {
-      issues: [
-        {
-          path: "",
-          message: err.message,
-          code: err.statusCode.toString(),
-        },
-      ],
-      name: err.name,
-    };
-  } else {
-    errorResponse = {
-      issues: [
-        {
-          path: "",
-          message: "Internal Server Error",
-          code: "INTERNAL_SERVER_ERROR",
-        },
-      ],
-      name: "InternalServerError",
-    };
+    errorResponse = zodErrorAdapter(err);
   }
 
-  res.status((err as HttpError).status || 500).json(errorResponse);
+  if (err instanceof HttpError) {
+    errorResponse = httpErrorAdapter(err);
+  }
+
+  if (err instanceof TokenExpiredError) {
+    errorResponse = {
+      name: err.name,
+      code: 400,
+      errors: [
+        {
+          message: err.message,
+          path: "",
+        },
+      ],
+    };
+  }
+  res.status(errorResponse.code).json(errorResponse);
 };
 
 export default errorHandler;

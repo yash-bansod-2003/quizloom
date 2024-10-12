@@ -20,6 +20,6 @@ export const ResultCreateValidator = (
     validationSchema.parse(req.body);
     next();
   } catch (error) {
-    return res.json(error);
+    return next(error);
   }
 };
