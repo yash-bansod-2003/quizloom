@@ -11,7 +11,6 @@ export const userCreateValidator = (
     lastName: z.string(),
     email: z.string(),
     password: z.string(),
-    restaurantId: z.string().optional(),
   });
   try {
     validationSchema.parse(req.body);

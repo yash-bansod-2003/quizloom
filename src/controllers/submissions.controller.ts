@@ -25,6 +25,7 @@ class SubmissionsController {
     });
 
     if (!user) {
+      this.logger.error(`User with id ${userId} not found`);
       return next(createHttpError.NotFound("user not found"));
     }
     const { quizId, questionId, answerId } = req.body as CreateSubmissionDto;
@@ -32,18 +33,21 @@ class SubmissionsController {
     const quiz = await this.quizzesService.findOne({ id: quizId });
 
     if (!quiz) {
+      this.logger.error(`Quiz with id ${quizId} not found`);
       return next(createHttpError.NotFound("quiz not found"));
     }
 
     const question = await this.questionsService.findOne({ id: questionId });
 
     if (!question) {
+      this.logger.error(`Question with id ${questionId} not found`);
       return next(createHttpError.NotFound("question not found"));
     }
 
     const answer = await this.answersService.findOne({ id: answerId });
 
     if (!answer) {
+      this.logger.error(`Answer with id ${answerId} not found`);
       return next(createHttpError.NotFound("answer not found"));
     }
 
@@ -53,6 +57,7 @@ class SubmissionsController {
       question,
       answer,
     });
+    this.logger.info(`Created new submission with id: ${Submission.id}`);
     return res.status(201).json(Submission);
   }
 
@@ -61,17 +66,26 @@ class SubmissionsController {
     return res.json(submissions);
   }
 
-  async findOne(req: Request, res: Response) {
+  async findOne(req: Request, res: Response, next: NextFunction) {
     const submission = await this.submissionsService.findOne({
       id: req.params.id,
     });
+    if (!submission) {
+      this.logger.error(`Submission with id ${req.params.id} not found`);
+      return next(createHttpError.NotFound("submission not found"));
+    }
     return res.json(submission);
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: Request, res: Response, next: NextFunction) {
     const submission = await this.submissionsService.delete({
       id: req.params.id,
     });
+    if (!submission) {
+      this.logger.error(`Submission with id ${req.params.id} not found`);
+      return next(createHttpError.NotFound("submission not found"));
+    }
+    this.logger.info(`Deleted submission with id: ${req.params.id}`);
     return res.json(submission);
   }
 }
