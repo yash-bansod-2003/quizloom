@@ -2,7 +2,7 @@
 import { Router } from "express";
 import QuizzesController from "@/controllers/quizzes.controller";
 import QuizzesService from "@/services/quizzes.service";
-import UsersService from "@/services/user.service";
+import UsersService from "@/services/users.service";
 import { AppDataSource } from "@/data-source";
 import { Quiz } from "@/entity/Quiz";
 import authenticate from "@/middlewares/authenticate";

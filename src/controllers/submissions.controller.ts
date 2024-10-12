@@ -5,7 +5,7 @@ import { Logger } from "winston";
 import createHttpError from "http-errors";
 import QuestionsService from "@/services/questions.service";
 import QuizzesService from "@/services/quizzes.service";
-import UserService from "@/services/user.service";
+import UserService from "@/services/users.service";
 import AnswersService from "@/services/answers.service";
 import { AuthenticatedRequest } from "@/middlewares/authenticate";
 class SubmissionsController {
@@ -20,7 +20,9 @@ class SubmissionsController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     const userId = (req as AuthenticatedRequest).user.sub;
-    const user = await this.usersService.findOne({ id: userId });
+    const user = await this.usersService.findOne({
+      where: { id: Number(userId) },
+    });
 
     if (!user) {
       return next(createHttpError.NotFound("user not found"));

@@ -4,7 +4,7 @@ import { CreateResultDto } from "@/dto/results";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
 import QuizzesService from "@/services/quizzes.service";
-import UserService from "@/services/user.service";
+import UserService from "@/services/users.service";
 import { AuthenticatedRequest } from "@/middlewares/authenticate";
 import SubmissionsService from "@/services/submissions.service";
 class ResultsController {
@@ -18,7 +18,9 @@ class ResultsController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     const userId = (req as AuthenticatedRequest).user.sub;
-    const user = await this.usersService.findOne({ id: userId });
+    const user = await this.usersService.findOne({
+      where: { id: Number(userId) },
+    });
 
     if (!user) {
       return next(createHttpError.NotFound("user not found"));
