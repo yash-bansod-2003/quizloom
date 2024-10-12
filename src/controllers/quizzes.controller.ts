@@ -23,6 +23,7 @@ class QuizzesController {
     if (!user) {
       return next(createHttpError.NotFound());
     }
+    this.logger.info(`Creating quiz for user ${userId}`);
     const quiz = await this.quizzesService.create({ ...createQuizDto, user });
     return res.status(201).json(quiz);
   }
@@ -37,6 +38,7 @@ class QuizzesController {
     if (!user) {
       return next(createHttpError.NotFound());
     }
+    this.logger.info(`Generating quiz for user ${userId}`);
     const quiz = await this.aiService.generateQuiz(createQuizDto);
     return res.status(200).json(quiz);
   }
@@ -49,6 +51,7 @@ class QuizzesController {
     if (!user) {
       return next(createHttpError.NotFound());
     }
+    this.logger.info(`Fetching all quizzes for user ${userId}`);
     const quizzes = await this.quizzesService.findAll({
       user: { id: user.id },
     });
@@ -63,6 +66,7 @@ class QuizzesController {
     if (!user) {
       return next(createHttpError.NotFound());
     }
+    this.logger.info(`Fetching quiz ${req.params.id} for user ${userId}`);
     const quiz = await this.quizzesService.findOne({
       id: req.params.id,
       user: { id: user.id },
@@ -78,6 +82,7 @@ class QuizzesController {
     if (!user) {
       return next(createHttpError.NotFound());
     }
+    this.logger.info(`Updating quiz ${req.params.id} for user ${userId}`);
     const quiz = await this.quizzesService.update(
       { id: req.params.id, user: { id: user.id } },
       req.body as UpdateQuizDto,
@@ -93,6 +98,7 @@ class QuizzesController {
     if (!user) {
       return next(createHttpError.NotFound());
     }
+    this.logger.info(`Deleting quiz ${req.params.id} for user ${userId}`);
     const quiz = await this.quizzesService.delete({
       id: req.params.id,
       user: { id: user.id },

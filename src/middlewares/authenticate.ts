@@ -21,7 +21,6 @@ export interface AuthenticatedRequest extends Request {
   user: {
     sub: string;
     role: string;
-    restaurantId: number;
     iat: number;
     exp: number;
   };
