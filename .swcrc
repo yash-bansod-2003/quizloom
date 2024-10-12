@@ -19,5 +19,5 @@
   "module": {
     "type": "commonjs"
   },
-  "exclude": ["__tests__", "migrations"]
+  "exclude": ["migrations"]
 }
