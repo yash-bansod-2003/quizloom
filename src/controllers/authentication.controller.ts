@@ -8,12 +8,14 @@ import { ForgotPasswordDto, ResetPasswordDto } from "@/dto/autentication";
 import { AuthenticatedRequest } from "@/middlewares/authenticate";
 import { Logger } from "winston";
 import HashingService from "@/services/hashing.service";
+import MailService from "@/services/notification/mail";
 
 class AutenticationController {
   constructor(
     private readonly userService: UserService,
     private readonly hashingService: HashingService,
     private readonly accessTokensService: TokensService,
+    private readonly mailService: MailService,
     private readonly forgotPasswordTokensService: TokensService,
     private readonly logger: Logger,
   ) {}
@@ -121,7 +123,10 @@ class AutenticationController {
         payload,
         tokenOptions,
       );
+      // This link change according how we handle it on frontend
+      const forgotLink = `http://localhost:3000/reset-password/${token}`;
 
+      await this.mailService.send({ user, link: forgotLink });
       this.logger.debug("forgot password process completed successfully");
       return res.json({ token });
     } catch (error) {

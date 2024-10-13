@@ -4,6 +4,7 @@ import AutenticationController from "@/controllers/authentication.controller";
 import UsersService from "@/services/users.service";
 import TokensService from "@/services/tokens.service";
 import HashingService from "@/services/hashing.service";
+import MailService from "@/services/notification/mail";
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/User";
 import authenticationMiddleware from "@/middlewares/authenticate";
@@ -20,10 +21,12 @@ const forgotPasswordTokensService = new TokensService(
 );
 const usersService = new UsersService(usersRepository);
 const hashingService = new HashingService();
+const mailService = new MailService(logger);
 const authenticationController = new AutenticationController(
   usersService,
   hashingService,
   accessTokensService,
+  mailService,
   forgotPasswordTokensService,
   logger,
 );

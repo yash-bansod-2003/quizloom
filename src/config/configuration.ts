@@ -22,6 +22,11 @@ const configuration = {
   ai: {
     key: process.env.GEMINIAI_API_KEY,
   },
+  smtp: {
+    service: process.env.SMTP_SERVICE,
+    username: process.env.SMTP_USERNAME,
+    password: process.env.SMTP_PASSWORD,
+  },
 };
 
 export default configuration;
