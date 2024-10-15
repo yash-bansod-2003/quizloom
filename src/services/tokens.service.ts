@@ -1,7 +1,12 @@
+import { RefreshToken } from "@/entity/RefreshToken";
 import * as jwt from "jsonwebtoken";
+import { DeepPartial, FindOneOptions, Repository } from "typeorm";
 
 class TokenService {
-  constructor(private readonly secret: string) {
+  constructor(
+    private readonly secret: string,
+    private readonly refreshTokensRepository?: Repository<RefreshToken>,
+  ) {
     this.secret = secret;
   }
 
@@ -22,6 +27,22 @@ class TokenService {
    */
   verify(token: string): jwt.JwtPayload | string {
     return jwt.verify(token, this.secret);
+  }
+
+  async persist(
+    createRefreshTokenDto: DeepPartial<RefreshToken>,
+  ): Promise<RefreshToken | undefined> {
+    if (this.refreshTokensRepository) {
+      return await this.refreshTokensRepository.save(createRefreshTokenDto);
+    }
+  }
+
+  async findOne(
+    options: FindOneOptions<RefreshToken>,
+  ): Promise<RefreshToken | null | undefined> {
+    if (this.refreshTokensRepository) {
+      return this.refreshTokensRepository.findOne(options);
+    }
   }
 }
 
