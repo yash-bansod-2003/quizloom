@@ -8,12 +8,15 @@ import { ForgotPasswordDto, ResetPasswordDto } from "@/dto/autentication";
 import { AuthenticatedRequest } from "@/middlewares/authenticate";
 import { Logger } from "winston";
 import HashingService from "@/services/hashing.service";
+import MailService from "@/services/notification/mail";
 
 class AutenticationController {
   constructor(
     private readonly userService: UserService,
     private readonly hashingService: HashingService,
     private readonly accessTokensService: TokensService,
+    private readonly refreshTokensService: TokensService,
+    private readonly mailService: MailService,
     private readonly forgotPasswordTokensService: TokensService,
     private readonly logger: Logger,
   ) {}
@@ -72,8 +75,26 @@ class AutenticationController {
       this.logger.debug("generating access token");
       const accessToken = this.accessTokensService.sign(payload, tokenOptions);
 
+      this.logger.debug("persist refresh token");
+      const savedRefreshToken = await this.refreshTokensService.create({
+        user,
+      });
+
+      if (!savedRefreshToken) {
+        this.logger.debug("persist refresh token failed");
+        return next(
+          createError.InternalServerError("refresh token not persist"),
+        );
+      }
+
+      this.logger.debug("generating refresh token");
+      const refreshToken = this.refreshTokensService.sign(
+        { ...payload, refreshTokenId: savedRefreshToken.id },
+        tokenOptions,
+      );
+
       this.logger.debug("login user successfully");
-      return res.json({ accessToken });
+      return res.json({ accessToken, refreshToken });
     } catch (error) {
       this.logger.error("login user failed", error);
       next(createError.InternalServerError());
@@ -121,7 +142,10 @@ class AutenticationController {
         payload,
         tokenOptions,
       );
+      // This link change according how we handle it on frontend
+      const forgotLink = `http://localhost:3000/reset-password/${token}`;
 
+      await this.mailService.send({ user, link: forgotLink });
       this.logger.debug("forgot password process completed successfully");
       return res.json({ token });
     } catch (error) {
@@ -171,6 +195,105 @@ class AutenticationController {
       return res.json(user);
     } catch (error) {
       this.logger.error("reset password process failed", error);
+      return next(createError.InternalServerError());
+    }
+  }
+
+  async refresh(req: Request, res: Response, next: NextFunction) {
+    const { refreshToken } = req.body as Record<string, string>;
+    this.logger.debug(`initiate refresh token process for ${refreshToken}`);
+
+    try {
+      const match = this.refreshTokensService.verify(refreshToken);
+      if (!match) {
+        this.logger.debug("invalid token");
+        return next(createError.Unauthorized());
+      }
+      const { sub: userId, refreshTokenId } = match as JsonWebToken.JwtPayload;
+      const user = await this.userService.findOne({
+        where: { id: Number(userId) },
+      });
+      if (!user) {
+        this.logger.debug("user not found");
+        return next(createError.NotFound("user not found"));
+      }
+
+      const refreshTokenExists = await this.refreshTokensService.findOne({
+        where: { id: Number(refreshTokenId) },
+      });
+
+      if (!refreshTokenExists) {
+        this.logger.debug("refresh token not found");
+        return next(createError.NotFound("refresh token not found"));
+      }
+
+      const payload: JsonWebToken.JwtPayload = {
+        sub: String(user.id),
+        role: user.role,
+      };
+      const tokenOptions: JsonWebToken.SignOptions = {
+        expiresIn: "30m",
+      };
+      this.logger.debug("generating access token");
+      const accessToken = this.accessTokensService.sign(payload, tokenOptions);
+
+      const deleteUserRefreshTokens = await this.refreshTokensService.delete({
+        user: { id: user.id },
+      });
+
+      if (!deleteUserRefreshTokens) {
+        this.logger.debug("delete user refresh tokens failed");
+        return next(createError.InternalServerError());
+      }
+
+      this.logger.debug("persist refresh token");
+      const savedRefreshToken = await this.refreshTokensService.create({
+        user,
+      });
+
+      if (!savedRefreshToken) {
+        this.logger.debug("persist refresh token failed");
+        return next(
+          createError.InternalServerError("refresh token not persist"),
+        );
+      }
+
+      this.logger.debug("generating refresh token");
+      const refreshTokenNew = this.refreshTokensService.sign(
+        { ...payload, refreshTokenId: savedRefreshToken.id },
+        tokenOptions,
+      );
+
+      this.logger.debug("token refreshed successfully");
+      return res.json({ accessToken, refreshToken: refreshTokenNew });
+    } catch (error) {
+      this.logger.debug(error);
+      return next(error);
+    }
+  }
+
+  async logout(req: Request, res: Response, next: NextFunction) {
+    const id = (req as AuthenticatedRequest).user.sub;
+    try {
+      const user = await this.userService.findOne({
+        where: { id: Number(id) },
+      });
+      if (!user) {
+        this.logger.debug("user not found");
+        return next(createError.NotFound("user not found"));
+      }
+      const deleteUserRefreshTokens = await this.refreshTokensService.delete({
+        user: { id: user.id },
+      });
+
+      if (!deleteUserRefreshTokens) {
+        this.logger.debug("delete user refresh tokens failed");
+        return next(createError.InternalServerError());
+      }
+
+      return res.json({ accessToken: "", refreshToken: "" });
+    } catch (error) {
+      this.logger.error("logout user failed", error);
       next(createError.InternalServerError());
     }
   }

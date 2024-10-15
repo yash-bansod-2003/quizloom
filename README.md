@@ -17,3 +17,17 @@ Next, initialize typescript by running the following command
 ```bash
 npx tsc --init
 ```
+
+### Migrations
+
+To generate the migrations with the help of typeorm
+
+```bash
+npm run migration:generate -- src/migrations/migration -d src/data-source.ts
+```
+
+To run generated migrations
+
+```bash
+npm run migration:run -- -d src/data-source.ts
+```

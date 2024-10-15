@@ -1,0 +1,11 @@
+meta {
+  name: Refresh
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:5001/auth/refresh
+  body: json
+  auth: bearer
+}
