@@ -76,7 +76,7 @@ class AutenticationController {
       const accessToken = this.accessTokensService.sign(payload, tokenOptions);
 
       this.logger.debug("persist refresh token");
-      const savedRefreshToken = await this.refreshTokensService.persist({
+      const savedRefreshToken = await this.refreshTokensService.create({
         user,
       });
 
@@ -195,7 +195,7 @@ class AutenticationController {
       return res.json(user);
     } catch (error) {
       this.logger.error("reset password process failed", error);
-      next(createError.InternalServerError());
+      return next(createError.InternalServerError());
     }
   }
 
@@ -238,7 +238,7 @@ class AutenticationController {
       const accessToken = this.accessTokensService.sign(payload, tokenOptions);
 
       this.logger.debug("persist refresh token");
-      const savedRefreshToken = await this.refreshTokensService.persist({
+      const savedRefreshToken = await this.refreshTokensService.create({
         user,
       });
 
@@ -259,6 +259,33 @@ class AutenticationController {
       return res.json({ accessToken, refreshToken: refreshTokenNew });
     } catch (error) {
       this.logger.debug(error);
+      return next(error);
+    }
+  }
+
+  async logout(req: Request, res: Response, next: NextFunction) {
+    const id = (req as AuthenticatedRequest).user.sub;
+    try {
+      const user = await this.userService.findOne({
+        where: { id: Number(id) },
+      });
+      if (!user) {
+        this.logger.debug("user not found");
+        return next(createError.NotFound("user not found"));
+      }
+      const deleteUserRefreshTokens = await this.refreshTokensService.delete({
+        user: { id: user.id },
+      });
+
+      if (!deleteUserRefreshTokens) {
+        this.logger.debug("delete user refresh tokens failed");
+        return next(createError.InternalServerError());
+      }
+
+      return res.json({ accessToken: "", refreshToken: "" });
+    } catch (error) {
+      this.logger.error("logout user failed", error);
+      next(createError.InternalServerError());
     }
   }
 }

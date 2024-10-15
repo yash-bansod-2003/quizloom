@@ -11,8 +11,8 @@
       "prepare": "husky",
       "test": "jest",
       "typeorm": "typeorm-ts-node-commonjs",
-      "makemigrations": "cross-env NODE_ENV=development npx typeorm-ts-node-commonjs migration:generate -d ./src/data-source.ts -n",
-      "migrate": "cross-env NODE_ENV=development typeorm-ts-node-commonjs migration:run -d src/data-source.ts"
+      "migration:generate": "cross-env NODE_ENV=development typeorm-ts-node-commonjs migration:generate",
+      "migration:run": "cross-env NODE_ENV=development typeorm-ts-node-commonjs migration:run"
    },
    "keywords": [],
    "author": "",

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpError } from "http-errors";
 import { ZodError } from "zod";
-import { TokenExpiredError } from "jsonwebtoken";
+import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import zodErrorAdapter from "@/adapters/error/zod.error";
 import httpErrorAdapter from "@/adapters/error/http.error";
 import configuration from "@/config/configuration";
@@ -45,6 +45,19 @@ const errorHandler = (
     errorResponse = {
       name: err.name,
       code: 400,
+      errors: [
+        {
+          message: err.message,
+          path: "",
+        },
+      ],
+    };
+  }
+
+  if (err instanceof JsonWebTokenError) {
+    errorResponse = {
+      name: err.name,
+      code: 401,
       errors: [
         {
           message: err.message,
