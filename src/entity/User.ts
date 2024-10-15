@@ -9,6 +9,7 @@ import {
 import { Quiz } from "./Quiz";
 import { Submission } from "./Submission";
 import { Result } from "./Result";
+import { RefreshToken } from "./RefreshToken";
 
 @Entity()
 export class User {
@@ -38,6 +39,9 @@ export class User {
 
   @OneToMany(() => Quiz, (quiz) => quiz.user)
   quizzes: Quiz[];
+
+  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
+  refreshTokens: RefreshToken[];
 
   @OneToMany(() => Submission, (submission) => submission.user)
   submissions: Submission[];

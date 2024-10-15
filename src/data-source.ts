@@ -7,6 +7,7 @@ import { Question } from "./entity/Question";
 import { Answer } from "./entity/Answer";
 import { Submission } from "./entity/Submission";
 import { Result } from "./entity/Result";
+import { RefreshToken } from "./entity/RefreshToken";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
   database: configuration.database.database,
   synchronize: false,
   logging: false,
-  entities: [User, Quiz, Question, Answer, Submission, Result],
+  entities: [User, RefreshToken, Quiz, Question, Answer, Submission, Result],
   migrations: ["src/migration/*.{ts,js}"],
   subscribers: [],
 });
