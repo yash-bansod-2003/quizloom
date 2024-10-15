@@ -237,6 +237,15 @@ class AutenticationController {
       this.logger.debug("generating access token");
       const accessToken = this.accessTokensService.sign(payload, tokenOptions);
 
+      const deleteUserRefreshTokens = await this.refreshTokensService.delete({
+        user: { id: user.id },
+      });
+
+      if (!deleteUserRefreshTokens) {
+        this.logger.debug("delete user refresh tokens failed");
+        return next(createError.InternalServerError());
+      }
+
       this.logger.debug("persist refresh token");
       const savedRefreshToken = await this.refreshTokensService.create({
         user,
