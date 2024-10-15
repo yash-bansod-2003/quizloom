@@ -11,13 +11,16 @@ import authenticationMiddleware from "@/middlewares/authenticate";
 import { userCreateValidator } from "@/validators/users.validators";
 import logger from "@/config/logger";
 import configuration from "@/config/configuration";
+import { RefreshToken } from "@/entity/RefreshToken";
 
 const router = Router();
 
 const usersRepository = AppDataSource.getRepository(User);
+const refreshTokensRepository = AppDataSource.getRepository(RefreshToken);
 const accessTokensService = new TokensService(configuration.jwt.secret.access!);
 const refreshTokensService = new TokensService(
   configuration.jwt.secret.refresh!,
+  refreshTokensRepository,
 );
 const forgotPasswordTokensService = new TokensService(
   configuration.jwt.secret.forgot_password!,
@@ -60,6 +63,18 @@ router.post(
 router.put(
   "/reset/:token",
   authenticationController.reset.bind(authenticationController),
+);
+
+router.post(
+  "/refresh",
+  authenticationMiddleware,
+  authenticationController.refresh.bind(authenticationController),
+);
+
+router.post(
+  "/logout",
+  authenticationMiddleware,
+  authenticationController.logout.bind(authenticationController),
 );
 
 export default router;

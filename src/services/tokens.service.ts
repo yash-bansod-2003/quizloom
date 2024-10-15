@@ -1,6 +1,12 @@
 import { RefreshToken } from "@/entity/RefreshToken";
 import * as jwt from "jsonwebtoken";
-import { DeepPartial, FindOneOptions, Repository } from "typeorm";
+import {
+  DeepPartial,
+  DeleteResult,
+  FindOneOptions,
+  FindOptionsWhere,
+  Repository,
+} from "typeorm";
 
 class TokenService {
   constructor(
@@ -29,7 +35,7 @@ class TokenService {
     return jwt.verify(token, this.secret);
   }
 
-  async persist(
+  async create(
     createRefreshTokenDto: DeepPartial<RefreshToken>,
   ): Promise<RefreshToken | undefined> {
     if (this.refreshTokensRepository) {
@@ -42,6 +48,14 @@ class TokenService {
   ): Promise<RefreshToken | null | undefined> {
     if (this.refreshTokensRepository) {
       return this.refreshTokensRepository.findOne(options);
+    }
+  }
+
+  async delete(
+    criteria: FindOptionsWhere<RefreshToken>,
+  ): Promise<DeleteResult | undefined> {
+    if (this.refreshTokensRepository) {
+      return this.refreshTokensRepository.delete(criteria);
     }
   }
 }
