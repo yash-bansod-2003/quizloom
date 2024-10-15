@@ -16,6 +16,9 @@ const router = Router();
 
 const usersRepository = AppDataSource.getRepository(User);
 const accessTokensService = new TokensService(configuration.jwt.secret.access!);
+const refreshTokensService = new TokensService(
+  configuration.jwt.secret.refresh!,
+);
 const forgotPasswordTokensService = new TokensService(
   configuration.jwt.secret.forgot_password!,
 );
@@ -26,6 +29,7 @@ const authenticationController = new AutenticationController(
   usersService,
   hashingService,
   accessTokensService,
+  refreshTokensService,
   mailService,
   forgotPasswordTokensService,
   logger,
