@@ -1,6 +1,8 @@
+import { Menu } from "lucide-react";
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const Icons = {
+  menu: Menu,
   logo: (props: IconProps) => (
     <svg
       id="logo-15"

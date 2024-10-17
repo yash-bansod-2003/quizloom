@@ -24,7 +24,7 @@ export function SiteHeader() {
                   "h-8 w-8 px-0",
                 )}
               >
-                <Icons.gitHub className="h-4 w-4" />
+                <Icons.gitHub className="h-5 w-5" />
                 <span className="sr-only">Githun</span>
               </div>
             </Link>
