@@ -34,12 +34,6 @@ export function MobileNav() {
             <MobileLink key="1" to="/" onOpenChange={setOpen}>
               Home
             </MobileLink>
-            <MobileLink key="2" to="/discover" onOpenChange={setOpen}>
-              Discover Quiz
-            </MobileLink>
-            <MobileLink key="3" to="/leaderboard" onOpenChange={setOpen}>
-              Leaderboard
-            </MobileLink>
             <MobileLink key="4" to="/about" onOpenChange={setOpen}>
               About
             </MobileLink>

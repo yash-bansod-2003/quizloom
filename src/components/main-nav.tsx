@@ -26,26 +26,6 @@ export function MainNav() {
           Home
         </Link>
         <Link
-          to="#"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname === "/discover" ? "text-foreground" : "text-foreground/60",
-          )}
-        >
-          Discover Quiz
-        </Link>
-        <Link
-          to="#"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname === "/leaderboard"
-              ? "text-foreground"
-              : "text-foreground/60",
-          )}
-        >
-          Leaderboard
-        </Link>
-        <Link
           to="/charts"
           className={cn(
             "transition-colors hover:text-foreground/80",
