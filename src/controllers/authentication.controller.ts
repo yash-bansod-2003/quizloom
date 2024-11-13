@@ -9,6 +9,7 @@ import { AuthenticatedRequest } from "@/middlewares/authenticate";
 import { Logger } from "winston";
 import HashingService from "@/services/hashing.service";
 import MailService from "@/services/notification/mail";
+import configuration from "@/config/configuration";
 
 class AutenticationController {
   constructor(
@@ -89,7 +90,7 @@ class AutenticationController {
 
       this.logger.debug("generating refresh token");
       const refreshToken = this.refreshTokensService.sign(
-        { ...payload, refreshTokenId: savedRefreshToken.id },
+        { ...payload, jti: String(savedRefreshToken.id) },
         tokenOptions,
       );
 
@@ -143,11 +144,15 @@ class AutenticationController {
         tokenOptions,
       );
       // This link change according how we handle it on frontend
-      const forgotLink = `http://localhost:3000/reset-password/${token}`;
+      const forgotLink = `${configuration.domain}/reset-password/${token}`;
 
-      await this.mailService.send({ user, link: forgotLink });
+      const mailsend = await this.mailService.send({ user, link: forgotLink });
+      if (!mailsend) {
+        this.logger.debug("mail not send");
+        return next(createError.InternalServerError());
+      }
       this.logger.debug("forgot password process completed successfully");
-      return res.json({ token });
+      return res.json({ id: user.id, email });
     } catch (error) {
       this.logger.error("forgot password process failed", error);
       next(createError.InternalServerError());
@@ -201,7 +206,7 @@ class AutenticationController {
 
   async refresh(req: Request, res: Response, next: NextFunction) {
     const { refreshToken } = req.body as Record<string, string>;
-    this.logger.debug(`initiate refresh token process for ${refreshToken}`);
+    this.logger.debug(`initiate refresh token process`);
 
     try {
       const match = this.refreshTokensService.verify(refreshToken);
@@ -209,7 +214,7 @@ class AutenticationController {
         this.logger.debug("invalid token");
         return next(createError.Unauthorized());
       }
-      const { sub: userId, refreshTokenId } = match as JsonWebToken.JwtPayload;
+      const { sub: userId, jti } = match as JsonWebToken.JwtPayload;
       const user = await this.userService.findOne({
         where: { id: Number(userId) },
       });
@@ -219,7 +224,7 @@ class AutenticationController {
       }
 
       const refreshTokenExists = await this.refreshTokensService.findOne({
-        where: { id: Number(refreshTokenId) },
+        where: { id: Number(jti) },
       });
 
       if (!refreshTokenExists) {
@@ -237,12 +242,12 @@ class AutenticationController {
       this.logger.debug("generating access token");
       const accessToken = this.accessTokensService.sign(payload, tokenOptions);
 
-      const deleteUserRefreshTokens = await this.refreshTokensService.delete({
-        user: { id: user.id },
+      const deleteUserRefreshToken = await this.refreshTokensService.delete({
+        id: Number(jti),
       });
 
-      if (!deleteUserRefreshTokens) {
-        this.logger.debug("delete user refresh tokens failed");
+      if (!deleteUserRefreshToken) {
+        this.logger.debug("delete user refresh token failed");
         return next(createError.InternalServerError());
       }
 
@@ -260,7 +265,7 @@ class AutenticationController {
 
       this.logger.debug("generating refresh token");
       const refreshTokenNew = this.refreshTokensService.sign(
-        { ...payload, refreshTokenId: savedRefreshToken.id },
+        { ...payload, jti: String(savedRefreshToken.id) },
         tokenOptions,
       );
 

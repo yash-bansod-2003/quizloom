@@ -5,6 +5,7 @@ const configuration = {
   node_env: process.env.NODE_ENV,
   host: process.env.HOST,
   port: process.env.PORT,
+  domain: process.env.DOMAIN,
   database: {
     host: process.env.DATABASE_HOST,
     port: process.env.DATABASE_PORT,

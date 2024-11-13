@@ -67,7 +67,6 @@ router.put(
 
 router.post(
   "/refresh",
-  authenticationMiddleware,
   authenticationController.refresh.bind(authenticationController),
 );
 

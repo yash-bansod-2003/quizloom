@@ -57,7 +57,7 @@ class MailService {
         theme: "default",
         product: {
           name: "Quizloom",
-          link: "https://mailgen.js/",
+          link: "https://quizloom.com/",
         },
       });
 
@@ -65,7 +65,7 @@ class MailService {
       const emailBody = mailGenerator.generate(email);
 
       const info = await this.transporter.sendMail({
-        from: `"Quizloom" <${configuration.smtp.username}>`,
+        from: `"Quizloom Team" <${configuration.smtp.username}>`,
         to: payload.user.email,
         subject: "Reset Password",
         html: emailBody,
