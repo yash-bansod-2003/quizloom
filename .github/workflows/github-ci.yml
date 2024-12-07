@@ -33,10 +33,10 @@ jobs:
       # - name: Run Unit Tests And Collect Test Coverage (using Jest)
       #   run: npm test
 
-      - name: Upload Coverage to Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Upload Coverage to Coveralls
+      #   uses: coverallsapp/github-action@v2
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Dependency Check (OWASP Dependency-Check)
         uses: dependency-check/Dependency-Check_Action@1.1.0
