@@ -14,6 +14,9 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    rules: {
+      'no-unsafe-argument': 'off',
+    },
   },
   {
     files: ['**/*.{js,mjs}'],

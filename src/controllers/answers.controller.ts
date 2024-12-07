@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import AnswersService from "@/services/answers.service";
-import { CreateAnswerDto, UpdateAnswerDto } from "@/dto/answers";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
-import QuestionsService from "@/services/questions.service";
+import AnswersService from "@/services/answers.service.js";
+import { CreateAnswerDto, UpdateAnswerDto } from "@/dto/answers.js";
+import QuestionsService from "@/services/questions.service.js";
 
 class AnswersController {
   constructor(
@@ -15,54 +15,92 @@ class AnswersController {
   async create(req: Request, res: Response, next: NextFunction) {
     this.logger.debug("creating answer");
     const { questionId, ...rest } = req.body as CreateAnswerDto;
-    const question = await this.questionsService.findOne({ id: questionId });
+    try {
+      const question = await this.questionsService.findOne({ id: questionId });
 
-    if (!question) {
-      this.logger.error("question not found");
-      return next(createHttpError.NotFound("question not found"));
+      if (!question) {
+        this.logger.error("question not found");
+        throw createHttpError.NotFound("question not found");
+      }
+      const answer = await this.answersService.create({ ...rest, question });
+      if (!answer) {
+        this.logger.error("answer not created");
+        throw createHttpError.InternalServerError("answer not created");
+      }
+
+      this.logger.debug("answer created");
+      res.status(201).json(answer);
+    } catch (error) {
+      this.logger.error(`error creating answer: ${error}`);
+      next(error);
     }
-    const Answer = await this.answersService.create({ ...rest, question });
-    this.logger.debug("answer created");
-    return res.status(201).json(Answer);
   }
 
-  async findAll(req: Request, res: Response) {
+  async findAll(req: Request, res: Response, next: NextFunction) {
     this.logger.debug("finding all answers");
-    const answers = await this.answersService.findAll();
-    this.logger.debug("answers found");
-    return res.json(answers);
-  }
-
-  async findOne(req: Request, res: Response) {
-    this.logger.debug("finding answer");
-    const answer = await this.answersService.findOne({
-      id: req.params.id,
-    });
-    if (!answer) {
-      this.logger.error("answer not found");
-      return res.status(404).json({ error: "answer not found" });
+    try {
+      const answers = await this.answersService.findAll();
+      this.logger.debug("answers found");
+      res.json(answers);
+    } catch (error) {
+      this.logger.error(`error finding all answers: ${error}`);
+      next(error);
     }
-    this.logger.debug("answer found");
-    return res.json(answer);
   }
 
-  async update(req: Request, res: Response) {
+  async findOne(req: Request, res: Response, next: NextFunction) {
+    this.logger.debug("finding answer");
+    try {
+      const answer = await this.answersService.findOne({
+        id: req.params.id,
+      });
+      if (!answer) {
+        this.logger.error("answer not found");
+        throw createHttpError.NotFound("answer not found");
+      }
+      this.logger.debug("answer found");
+      res.json(answer);
+    } catch (error) {
+      this.logger.error(`error finding answer: ${error}`);
+      next(error);
+    }
+  }
+
+  async update(req: Request, res: Response, next: NextFunction) {
     this.logger.debug("updating answer");
-    const answer = await this.answersService.update(
-      { id: req.params.id },
-      req.body as UpdateAnswerDto,
-    );
-    this.logger.debug("answer updated");
-    return res.json(answer);
+    try {
+      const answer = await this.answersService.update(
+        { id: req.params.id },
+        req.body as UpdateAnswerDto,
+      );
+      if (!answer) {
+        this.logger.error("answer not updated");
+        throw createHttpError.InternalServerError("answer not updated");
+      }
+      this.logger.debug("answer updated");
+      res.json(answer);
+    } catch (error) {
+      this.logger.error(`error updating answer: ${error}`);
+      next(error);
+    }
   }
 
-  async delete(req: Request, res: Response) {
+  async delete(req: Request, res: Response, next: NextFunction) {
     this.logger.debug("deleting answer");
-    const answer = await this.answersService.delete({
-      id: req.params.id,
-    });
-    this.logger.debug("answer deleted");
-    return res.json(answer);
+    try {
+      const answer = await this.answersService.delete({
+        id: req.params.id,
+      });
+      if (!answer) {
+        this.logger.error("answer not deleted");
+        throw createHttpError.InternalServerError("answer not deleted");
+      }
+      this.logger.debug("answer deleted");
+      res.json(answer);
+    } catch (error) {
+      this.logger.error(`error deleting answer: ${error}`);
+      next(error);
+    }
   }
 }
 

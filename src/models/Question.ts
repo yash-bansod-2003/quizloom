@@ -7,26 +7,26 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from "typeorm";
-import { Quiz } from "./Quiz";
-import { Answer } from "./Answer";
-import { Submission } from "./Submission";
+import { Quiz } from "@/models/Quiz.js";
+import { Answer } from "@/models/Answer.js";
+import { Submission } from "@/models/Submission.js";
 
 @Entity("questions")
 export class Question {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: "text" })
   text: string;
 
-  @Column({ enum: ["mcq", "true_false", "written"] })
+  @Column({ enum: ["mcq", "true_false", "written"], type: "text" })
   type: string;
 
   @CreateDateColumn()
-  created_at: number;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updated_at: number;
+  updated_at: Date;
 
   @ManyToOne(() => Quiz, (quiz) => quiz.questions)
   quiz: Quiz;

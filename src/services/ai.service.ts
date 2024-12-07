@@ -1,11 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import configuration from "@/config/configuration";
-import { CreateQuizDto } from "@/dto/quizzes";
+import configuration from "@/config/configuration.js";
+import { CreateQuizDto } from "@/dto/quizzes.js";
 
 class Aiservice {
   private readonly client: GoogleGenerativeAI;
   constructor() {
-    this.client = new GoogleGenerativeAI(configuration.ai.key!);
+    this.client = new GoogleGenerativeAI(configuration.ai.key);
   }
   async generateQuiz(
     createQuizDto: CreateQuizDto,
@@ -30,7 +30,7 @@ class Aiservice {
     `;
     const result = await model.generateContent(prompt);
     const parsedResult = this.extractJsonFromMarkdown(
-      result.response.candidates![0].content.parts[0].text!,
+      result.response.candidates[0].content.parts[0].text,
     );
     return parsedResult;
   }

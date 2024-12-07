@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import nodemailer from "nodemailer";
 import mailgen from "mailgen";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { Logger } from "winston";
-import configuration from "@/config/configuration";
-import { User } from "@/entity/User";
+import configuration from "@/config/configuration.js";
+import { User } from "@/models/User.js";
 
 export interface MailPayload {
   user: User;

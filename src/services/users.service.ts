@@ -1,4 +1,4 @@
-import { User } from "@/entity/User";
+import { User } from "@/models/User.js";
 import {
   DeepPartial,
   DeleteResult,
@@ -9,7 +9,7 @@ import {
   SaveOptions,
   UpdateResult,
 } from "typeorm";
-import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity.js";
 
 class UsersService {
   constructor(private readonly usersRepository: Repository<User>) {}
@@ -17,7 +17,7 @@ class UsersService {
     return await this.usersRepository.save(createUserDto, options);
   }
 
-  findAll(options?: FindManyOptions<User> | undefined): Promise<User[]> {
+  findAll(options?: FindManyOptions<User>): Promise<User[]> {
     return this.usersRepository.find(options);
   }
 

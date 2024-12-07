@@ -5,10 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { User } from "./User";
-import { Question } from "./Question";
-import { Quiz } from "./Quiz";
-import { Answer } from "./Answer";
+import { User } from "@/models/User.js";
+import { Question } from "@/models/Question.js";
+import { Quiz } from "@/models/Quiz.js";
+import { Answer } from "@/models/Answer.js";
 
 @Entity("submissions")
 export class Submission {

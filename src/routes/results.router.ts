@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from "express";
-import { AppDataSource } from "@/data-source";
-import authenticate from "@/middlewares/authenticate";
-import logger from "@/config/logger";
-import { ResultCreateValidator } from "@/validators/results.validator";
-import { User } from "@/entity/User";
-import { Quiz } from "@/entity/Quiz";
-import UserService from "@/services/users.service";
-import QuizzesService from "@/services/quizzes.service";
-import { Result } from "@/entity/Result";
-import ResultsService from "@/services/results.service";
-import ResultsController from "@/controllers/results.controller";
-import { Submission } from "@/entity/Submission";
-import SubmissionsService from "@/services/submissions.service";
+import { AppDataSource } from "@/data-source.js";
+import authenticate from "@/middlewares/authenticate.js";
+import logger from "@/config/logger.js";
+import { ResultCreateValidator } from "@/validators/results.validator.js";
+import { User } from "@/models/User.js";
+import { Quiz } from "@/models/Quiz.js";
+import UserService from "@/services/users.service.js";
+import QuizzesService from "@/services/quizzes.service.js";
+import { Result } from "@/models/Result.js";
+import ResultsService from "@/services/results.service.js";
+import ResultsController from "@/controllers/results.controller.js";
+import { Submission } from "@/models/Submission.js";
+import SubmissionsService from "@/services/submissions.service.js";
 
 const router = Router();
 
@@ -38,25 +37,21 @@ router.post(
   "/",
   authenticate,
   ResultCreateValidator,
-  resultsController.create.bind(resultsController),
+  async (req, res, next) => {
+    await resultsController.create(req, res, next);
+  },
 );
 
-router.get(
-  "/",
-  authenticate,
-  resultsController.findAll.bind(resultsController),
-);
+router.get("/", authenticate, async (req, res, next) => {
+  await resultsController.findAll(req, res, next);
+});
 
-router.get(
-  "/:id",
-  authenticate,
-  resultsController.findOne.bind(resultsController),
-);
+router.get("/:id", authenticate, async (req, res, next) => {
+  await resultsController.findOne(req, res, next);
+});
 
-router.delete(
-  "/:id",
-  authenticate,
-  resultsController.delete.bind(resultsController),
-);
+router.delete("/:id", authenticate, async (req, res, next) => {
+  await resultsController.delete(req, res, next);
+});
 
 export default router;

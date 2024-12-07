@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import SubmissionsService from "@/services/submissions.service";
-import { CreateSubmissionDto } from "@/dto/submissions";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
-import QuestionsService from "@/services/questions.service";
-import QuizzesService from "@/services/quizzes.service";
-import UserService from "@/services/users.service";
-import AnswersService from "@/services/answers.service";
-import { AuthenticatedRequest } from "@/middlewares/authenticate";
+import SubmissionsService from "@/services/submissions.service.js";
+import { CreateSubmissionDto } from "@/dto/submissions.js";
+import QuestionsService from "@/services/questions.service.js";
+import QuizzesService from "@/services/quizzes.service.js";
+import UserService from "@/services/users.service.js";
+import AnswersService from "@/services/answers.service.js";
+import { AuthenticatedRequest } from "@/middlewares/authenticate.js";
 class SubmissionsController {
   constructor(
     private readonly submissionsService: SubmissionsService,
@@ -61,9 +61,13 @@ class SubmissionsController {
     return res.status(201).json(Submission);
   }
 
-  async findAll(req: Request, res: Response) {
-    const submissions = await this.submissionsService.findAll();
-    return res.json(submissions);
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const submissions = await this.submissionsService.findAll();
+      return res.json(submissions);
+    } catch (error) {
+      next(error);
+    }
   }
 
   async findOne(req: Request, res: Response, next: NextFunction) {

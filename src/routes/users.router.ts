@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from "express";
-import UsersController from "@/controllers/users.controller";
-import UsersService from "@/services/users.service";
-import { AppDataSource } from "@/data-source";
-import { User } from "@/entity/User";
-import authenticate from "@/middlewares/authenticate";
-import authorization from "@/middlewares/authorization";
-import logger from "@/config/logger";
+import UsersController from "@/controllers/users.controller.js";
+import UsersService from "@/services/users.service.js";
+import { AppDataSource } from "@/data-source.js";
+import { User } from "@/models/User.js";
+import authenticate from "@/middlewares/authenticate.js";
+import authorization from "@/middlewares/authorization.js";
+import logger from "@/config/logger.js";
 
 const router = Router();
 
@@ -18,35 +17,45 @@ router.post(
   "/",
   authenticate,
   authorization(["admin"]),
-  usersController.create.bind(usersController),
+  async (req, res, next) => {
+    await usersController.create(req, res, next);
+  },
 );
 
 router.get(
   "/",
   authenticate,
   authorization(["admin"]),
-  usersController.findAll.bind(usersController),
+  async (req, res, next) => {
+    await usersController.findAll(req, res, next);
+  },
 );
 
 router.get(
   "/:id",
   authenticate,
   authorization(["admin"]),
-  usersController.findOne.bind(usersController),
+  async (req, res, next) => {
+    await usersController.findOne(req, res, next);
+  },
 );
 
 router.put(
   "/:id",
   authenticate,
   authorization(["admin"]),
-  usersController.update.bind(usersController),
+  async (req, res, next) => {
+    await usersController.update(req, res, next);
+  },
 );
 
 router.delete(
   "/:id",
   authenticate,
   authorization(["admin"]),
-  usersController.delete.bind(usersController),
+  async (req, res, next) => {
+    await usersController.delete(req, res, next);
+  },
 );
 
 export default router;

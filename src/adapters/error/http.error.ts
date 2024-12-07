@@ -1,5 +1,5 @@
 import { HttpError } from "http-errors";
-import { ErrorResponse } from "@/middlewares/error-handler";
+import { ErrorResponse } from "@/middlewares/error-handler.js";
 
 const httpErrorAdapter = (error: HttpError): ErrorResponse => {
   return {

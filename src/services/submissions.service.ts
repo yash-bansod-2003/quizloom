@@ -1,4 +1,4 @@
-import { Submission } from "@/entity/Submission";
+import { Submission } from "@/models/Submission.js";
 import { DeepPartial, DeleteResult, Repository } from "typeorm";
 
 class SubmissionsService {

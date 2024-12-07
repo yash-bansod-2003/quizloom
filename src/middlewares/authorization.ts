@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { AuthenticatedRequest } from "@/middlewares/authenticate";
 import createHttpError from "http-errors";
+import { AuthenticatedRequest } from "@/middlewares/authenticate.js";
 
 const authorization = (roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {

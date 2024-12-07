@@ -1,31 +1,28 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "ES5",
-    "lib": ["ES5", "ES6"],
-    "module": "CommonJS",
-    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
+
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "declaration": false,
-    "sourceMap": true,
-    "outDir": "./dist/src",
-    "removeComments": true,
+
+    "strict": false,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "strictPropertyInitialization": false,
     "skipLibCheck": true,
-    "noImplicitAny": false,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
+    "moduleResolution": "node16",
+    "strictPropertyInitialization": false,
+    "removeComments": true,
     "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  }
+    "moduleDetection": "force",
+    "allowJs": true,
+    "isolatedModules": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

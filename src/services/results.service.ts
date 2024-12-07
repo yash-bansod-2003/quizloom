@@ -1,4 +1,4 @@
-import { Result } from "@/entity/Result";
+import { Result } from "@/models/Result.js";
 import { DeepPartial, DeleteResult, Repository } from "typeorm";
 
 class ResultsService {
