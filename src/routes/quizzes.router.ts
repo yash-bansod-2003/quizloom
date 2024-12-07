@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from "express";
-import QuizzesController from "@/controllers/quizzes.controller";
-import QuizzesService from "@/services/quizzes.service";
-import UsersService from "@/services/users.service";
-import { AppDataSource } from "@/data-source";
-import { Quiz } from "@/entity/Quiz";
-import authenticate from "@/middlewares/authenticate";
-import logger from "@/config/logger";
-import { QuizCreateValidator } from "@/validators/quizzes.validator";
-import { User } from "@/entity/User";
-import Aiservice from "@/services/ai.service";
+import QuizzesController from "@/controllers/quizzes.controller.js";
+import QuizzesService from "@/services/quizzes.service.js";
+import UsersService from "@/services/users.service.js";
+import { AppDataSource } from "@/data-source.js";
+import { Quiz } from "@/models/Quiz.js";
+import authenticate from "@/middlewares/authenticate.js";
+import logger from "@/config/logger.js";
+import { QuizCreateValidator } from "@/validators/quizzes.validator.js";
+import { User } from "@/models/User.js";
+import Aiservice from "@/services/ai.service.js";
 
 const router = Router();
 
@@ -26,42 +25,33 @@ const quizzesController = new QuizzesController(
   logger,
 );
 
-router.post(
-  "/",
-  authenticate,
-  QuizCreateValidator,
-  quizzesController.create.bind(quizzesController),
-);
+router.post("/", authenticate, QuizCreateValidator, async (req, res, next) => {
+  await quizzesController.create(req, res, next);
+});
 
 router.post(
   "/generate",
   authenticate,
   QuizCreateValidator,
-  quizzesController.generate.bind(quizzesController),
+  async (req, res, next) => {
+    await quizzesController.generate(req, res, next);
+  },
 );
 
-router.get(
-  "/",
-  authenticate,
-  quizzesController.findAll.bind(quizzesController),
-);
+router.get("/", authenticate, async (req, res, next) => {
+  await quizzesController.findAll(req, res, next);
+});
 
-router.get(
-  "/:id",
-  authenticate,
-  quizzesController.findOne.bind(quizzesController),
-);
+router.get("/:id", authenticate, async (req, res, next) => {
+  await quizzesController.findOne(req, res, next);
+});
 
-router.put(
-  "/:id",
-  authenticate,
-  quizzesController.update.bind(quizzesController),
-);
+router.put("/:id", authenticate, async (req, res, next) => {
+  await quizzesController.update(req, res, next);
+});
 
-router.delete(
-  "/:id",
-  authenticate,
-  quizzesController.delete.bind(quizzesController),
-);
+router.delete("/:id", authenticate, async (req, res, next) => {
+  await quizzesController.delete(req, res, next);
+});
 
 export default router;

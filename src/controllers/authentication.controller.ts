@@ -1,15 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import createError from "http-errors";
-import JsonWebToken from "jsonwebtoken";
-import UserService from "@/services/users.service";
-import TokensService from "@/services/tokens.service";
-import { CreateUserDto } from "@/dto/users";
-import { ForgotPasswordDto, ResetPasswordDto } from "@/dto/autentication";
-import { AuthenticatedRequest } from "@/middlewares/authenticate";
 import { Logger } from "winston";
-import HashingService from "@/services/hashing.service";
-import MailService from "@/services/notification/mail";
-import configuration from "@/config/configuration";
+import JsonWebToken from "jsonwebtoken";
+import createError from "http-errors";
+import UserService from "@/services/users.service.js";
+import TokensService from "@/services/tokens.service.js";
+import { CreateUserDto } from "@/dto/users.js";
+import { ForgotPasswordDto, ResetPasswordDto } from "@/dto/autentication.js";
+import { AuthenticatedRequest } from "@/middlewares/authenticate.js";
+import HashingService from "@/services/hashing.service.js";
+import MailService from "@/services/notification/mail.js";
+import configuration from "@/config/configuration.js";
 
 class AutenticationController {
   constructor(

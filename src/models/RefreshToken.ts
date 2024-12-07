@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { User } from "./User";
+import { User } from "@/models/User.js";
 
 @Entity("refresh-tokens")
 export class RefreshToken {
@@ -13,10 +13,10 @@ export class RefreshToken {
   id: number;
 
   @CreateDateColumn()
-  created_at: number;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updated_at: number;
+  updated_at: Date;
 
   @ManyToOne(() => User, (user) => user.quizzes)
   user: User;

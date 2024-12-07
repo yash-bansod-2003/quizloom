@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {
   Column,
   Entity,
@@ -7,25 +8,25 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from "typeorm";
-import { Question } from "./Question";
-import { Submission } from "./Submission";
+import { Question } from "@/models/Question.js";
+import { Submission } from "@/models/Submission.js";
 
 @Entity("answers")
 export class Answer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: "text" })
   text: string;
 
-  @Column({ default: false })
+  @Column({ default: false, type: "boolean" })
   is_correct: boolean;
 
   @CreateDateColumn()
-  created_at: number;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updated_at: number;
+  updated_at: Date;
 
   @ManyToOne(() => Question, (question) => question.answers)
   question: Question;

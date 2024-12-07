@@ -1,6 +1,6 @@
-import { Question } from "@/entity/Question";
+import { Question } from "@/models/Question.js";
 import { DeepPartial, DeleteResult, Repository, UpdateResult } from "typeorm";
-import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity.js";
 
 class QuestionsService {
   constructor(private readonly questionsRepository: Repository<Question>) {}

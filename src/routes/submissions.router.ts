@@ -1,20 +1,19 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from "express";
-import AnswersService from "@/services/answers.service";
-import QuestionsService from "@/services/questions.service";
-import { AppDataSource } from "@/data-source";
-import authenticate from "@/middlewares/authenticate";
-import logger from "@/config/logger";
-import { SubmissionCreateValidator } from "@/validators/submissions.validator";
-import { Question } from "@/entity/Question";
-import { Answer } from "@/entity/Answer";
-import { User } from "@/entity/User";
-import { Quiz } from "@/entity/Quiz";
-import UserService from "@/services/users.service";
-import QuizzesService from "@/services/quizzes.service";
-import { Submission } from "@/entity/Submission";
-import SubmissionsService from "@/services/submissions.service";
-import SubmissionsController from "@/controllers/submissions.controller";
+import AnswersService from "@/services/answers.service.js";
+import QuestionsService from "@/services/questions.service.js";
+import { AppDataSource } from "@/data-source.js";
+import authenticate from "@/middlewares/authenticate.js";
+import logger from "@/config/logger.js";
+import { SubmissionCreateValidator } from "@/validators/submissions.validator.js";
+import { Question } from "@/models/Question.js";
+import { Answer } from "@/models/Answer.js";
+import { User } from "@/models/User.js";
+import { Quiz } from "@/models/Quiz.js";
+import UserService from "@/services/users.service.js";
+import QuizzesService from "@/services/quizzes.service.js";
+import { Submission } from "@/models/Submission.js";
+import SubmissionsService from "@/services/submissions.service.js";
+import SubmissionsController from "@/controllers/submissions.controller.js";
 
 const router = Router();
 
@@ -43,25 +42,21 @@ router.post(
   "/",
   authenticate,
   SubmissionCreateValidator,
-  submissionsController.create.bind(submissionsController),
+  async (req, res, next) => {
+    await submissionsController.create(req, res, next);
+  },
 );
 
-router.get(
-  "/",
-  authenticate,
-  submissionsController.findAll.bind(submissionsController),
-);
+router.get("/", authenticate, async (req, res, next) => {
+  await submissionsController.findAll(req, res, next);
+});
 
-router.get(
-  "/:id",
-  authenticate,
-  submissionsController.findOne.bind(submissionsController),
-);
+router.get("/:id", authenticate, async (req, res, next) => {
+  await submissionsController.findOne(req, res, next);
+});
 
-router.delete(
-  "/:id",
-  authenticate,
-  submissionsController.delete.bind(submissionsController),
-);
+router.delete("/:id", authenticate, async (req, res, next) => {
+  await submissionsController.delete(req, res, next);
+});
 
 export default router;

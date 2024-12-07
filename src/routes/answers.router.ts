@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from "express";
-import AnswersController from "@/controllers/answers.controller";
-import AnswersService from "@/services/answers.service";
-import QuestionsService from "@/services/questions.service";
-import { AppDataSource } from "@/data-source";
-import authenticate from "@/middlewares/authenticate";
-import logger from "@/config/logger";
-import { AnswerCreateValidator } from "@/validators/answers.validator";
-import { Question } from "@/entity/Question";
-import { Answer } from "@/entity/Answer";
+import AnswersController from "@/controllers/answers.controller.js";
+import AnswersService from "@/services/answers.service.js";
+import QuestionsService from "@/services/questions.service.js";
+import { AppDataSource } from "@/data-source.js";
+import authenticate from "@/middlewares/authenticate.js";
+import logger from "@/config/logger.js";
+import { AnswerCreateValidator } from "@/validators/answers.validator.js";
+import { Question } from "@/models/Question.js";
+import { Answer } from "@/models/Answer.js";
 
 const router = Router();
 
@@ -27,31 +26,25 @@ router.post(
   "/",
   authenticate,
   AnswerCreateValidator,
-  answersController.create.bind(answersController),
+  async (req, res, next) => {
+    await answersController.create(req, res, next);
+  },
 );
 
-router.get(
-  "/",
-  authenticate,
-  answersController.findAll.bind(answersController),
-);
+router.get("/", authenticate, async (req, res, next) => {
+  await answersController.findAll(req, res, next);
+});
 
-router.get(
-  "/:id",
-  authenticate,
-  answersController.findOne.bind(answersController),
-);
+router.get("/:id", authenticate, async (req, res, next) => {
+  await answersController.findOne(req, res, next);
+});
 
-router.put(
-  "/:id",
-  authenticate,
-  answersController.update.bind(answersController),
-);
+router.put("/:id", authenticate, async (req, res, next) => {
+  await answersController.update(req, res, next);
+});
 
-router.delete(
-  "/:id",
-  authenticate,
-  answersController.delete.bind(answersController),
-);
+router.delete("/:id", authenticate, async (req, res, next) => {
+  await answersController.delete(req, res, next);
+});
 
 export default router;

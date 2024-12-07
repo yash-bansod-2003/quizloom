@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import TokensService from "@/services/tokens.service";
-import configuration from "@/config/configuration";
 import createHttpError from "http-errors";
-const accessTokensService = new TokensService(configuration.jwt.secret.access!);
+import TokensService from "@/services/tokens.service.js";
+import configuration from "@/config/configuration.js";
+const accessTokensService = new TokensService(configuration.jwt.secret.access);
 const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const authenticationHeader = req.headers.authorization;
   const authenticationToken = authenticationHeader?.split(" ")[1];

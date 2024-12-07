@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import QuizzesService from "@/services/quizzes.service";
-import UsersService from "@/services/users.service";
-import AiService from "@/services/ai.service";
-import { CreateQuizDto, UpdateQuizDto } from "@/dto/quizzes";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
-import { AuthenticatedRequest } from "@/middlewares/authenticate";
+import QuizzesService from "@/services/quizzes.service.js";
+import UsersService from "@/services/users.service.js";
+import AiService from "@/services/ai.service.js";
+import { CreateQuizDto, UpdateQuizDto } from "@/dto/quizzes.js";
+import { AuthenticatedRequest } from "@/middlewares/authenticate.js";
 
 class QuizzesController {
   constructor(

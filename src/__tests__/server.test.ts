@@ -1,6 +1,6 @@
 import supertest from "supertest";
-import { createServer } from "@/server";
-import { App } from "supertest/types";
+import { createServer } from "@/server.js";
+import { App } from "supertest/types.js";
 
 describe("server", () => {
   describe("get /status", () => {
