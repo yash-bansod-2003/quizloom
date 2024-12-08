@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
   postgres-database:
     image: postgres:latest
@@ -10,6 +10,15 @@ services:
       POSTGRES_PASSWORD: root
     volumes:
       - postgres-db:/var/lib/postgresql/data
+
+  quizloom-production:
+    image: quizloom
+    container_name: quizloom-production-test
+    env_file: .env.production
+    ports:
+      - "5001:5001"
+    stdin_open: true
+    tty: true
 
 volumes:
   postgres-db:
