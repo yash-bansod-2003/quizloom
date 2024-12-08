@@ -28,6 +28,9 @@ export class User {
   @Column({ type: "text" })
   password: string;
 
+  @Column({ type: "boolean", default: false })
+  is_verified: boolean;
+
   @Column({ type: "text", enum: ["user", "manager", "admin"], default: "user" })
   role: string;
 

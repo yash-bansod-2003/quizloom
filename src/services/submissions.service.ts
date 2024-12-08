@@ -1,28 +1,48 @@
 import { Submission } from "@/models/Submission.js";
-import { DeepPartial, DeleteResult, Repository } from "typeorm";
+import {
+  DeepPartial,
+  DeleteResult,
+  Repository,
+  SaveOptions,
+  FindManyOptions,
+  FindOneOptions,
+  FindOptionsWhere,
+  UpdateResult,
+} from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity.js";
 
 class SubmissionsService {
   constructor(private readonly submissionsRepository: Repository<Submission>) {}
-  async create(createSubmissionDto: DeepPartial<Submission>) {
-    return await this.submissionsRepository.save(createSubmissionDto);
+
+  async create(
+    createSubmissionDto: DeepPartial<Submission>,
+    options?: SaveOptions,
+  ) {
+    return await this.submissionsRepository.save(createSubmissionDto, options);
   }
 
-  findAll(expression: Record<string, unknown> = {}): Promise<Submission[]> {
-    return this.submissionsRepository.find({
-      where: expression,
-      relations: { answer: true },
-    });
+  async findAll(options?: FindManyOptions<Submission>): Promise<Submission[]> {
+    return await this.submissionsRepository.find(options);
   }
 
-  findOne(expression: Record<string, unknown>): Promise<Submission | null> {
-    return this.submissionsRepository.findOne({
-      where: expression,
-      relations: { answer: true },
-    });
+  async findOne(
+    options: FindOneOptions<Submission>,
+  ): Promise<Submission | null> {
+    return await this.submissionsRepository.findOne(options);
   }
 
-  delete(expression: Record<string, unknown>): Promise<DeleteResult> {
-    return this.submissionsRepository.delete(expression);
+  async update(
+    criteria: FindOptionsWhere<Submission>,
+    updateSubmissionDto: QueryDeepPartialEntity<Submission>,
+  ): Promise<UpdateResult> {
+    return await this.submissionsRepository.update(
+      criteria,
+      updateSubmissionDto,
+    );
+  }
+
+  async delete(criteria: FindOptionsWhere<Submission>): Promise<DeleteResult> {
+    return await this.submissionsRepository.delete(criteria);
   }
 }
 

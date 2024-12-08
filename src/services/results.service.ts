@@ -1,24 +1,40 @@
 import { Result } from "@/models/Result.js";
-import { DeepPartial, DeleteResult, Repository } from "typeorm";
+import {
+  DeepPartial,
+  DeleteResult,
+  Repository,
+  SaveOptions,
+  FindManyOptions,
+  FindOneOptions,
+  FindOptionsWhere,
+  UpdateResult,
+} from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity.js";
 
 class ResultsService {
   constructor(private readonly resultsRepository: Repository<Result>) {}
-  async create(createResultDto: DeepPartial<Result>) {
-    return await this.resultsRepository.save(createResultDto);
+
+  async create(createResultDto: DeepPartial<Result>, options?: SaveOptions) {
+    return await this.resultsRepository.save(createResultDto, options);
   }
 
-  findAll(): Promise<Result[]> {
-    return this.resultsRepository.find();
+  async findAll(options?: FindManyOptions<Result>): Promise<Result[]> {
+    return await this.resultsRepository.find(options);
   }
 
-  findOne(expression: Record<string, unknown>): Promise<Result | null> {
-    return this.resultsRepository.findOne({
-      where: expression,
-    });
+  async findOne(options: FindOneOptions<Result>): Promise<Result | null> {
+    return await this.resultsRepository.findOne(options);
   }
 
-  delete(expression: Record<string, unknown>): Promise<DeleteResult> {
-    return this.resultsRepository.delete(expression);
+  async update(
+    options: FindOptionsWhere<Result>,
+    updateResultDto: QueryDeepPartialEntity<Result>,
+  ): Promise<UpdateResult> {
+    return await this.resultsRepository.update(options, updateResultDto);
+  }
+
+  async delete(criteria: FindOptionsWhere<Result>): Promise<DeleteResult> {
+    return await this.resultsRepository.delete(criteria);
   }
 }
 

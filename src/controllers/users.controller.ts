@@ -59,14 +59,15 @@ class UsersController {
   }
 
   async update(req: Request, res: Response, next: NextFunction) {
-    this.logger.debug("updating user", { id: req.params.id, ...req.body });
+    const userId = Number(req.params.id);
+    this.logger.debug("updating user", { id: userId, ...req.body });
     try {
       const user = await this.usersService.update(
-        { id: req.params.id },
+        { id: userId },
         req.body as UpdateUserDto,
       );
       if (!user) {
-        this.logger.debug("user not updated", { id: req.params.id });
+        this.logger.debug("user not updated", { id: userId });
         throw createError("user not updated");
       }
       this.logger.debug("user updated successfully");

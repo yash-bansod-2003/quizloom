@@ -30,21 +30,25 @@ class SubmissionsController {
     }
     const { quizId, questionId, answerId } = req.body as CreateSubmissionDto;
 
-    const quiz = await this.quizzesService.findOne({ id: quizId });
+    const quiz = await this.quizzesService.findOne({ where: { id: quizId } });
 
     if (!quiz) {
       this.logger.error(`Quiz with id ${quizId} not found`);
       return next(createHttpError.NotFound("quiz not found"));
     }
 
-    const question = await this.questionsService.findOne({ id: questionId });
+    const question = await this.questionsService.findOne({
+      where: { id: questionId },
+    });
 
     if (!question) {
       this.logger.error(`Question with id ${questionId} not found`);
       return next(createHttpError.NotFound("question not found"));
     }
 
-    const answer = await this.answersService.findOne({ id: answerId });
+    const answer = await this.answersService.findOne({
+      where: { id: answerId },
+    });
 
     if (!answer) {
       this.logger.error(`Answer with id ${answerId} not found`);
@@ -71,8 +75,9 @@ class SubmissionsController {
   }
 
   async findOne(req: Request, res: Response, next: NextFunction) {
+    const submissionId = Number(req.params.id);
     const submission = await this.submissionsService.findOne({
-      id: req.params.id,
+      where: { id: submissionId },
     });
     if (!submission) {
       this.logger.error(`Submission with id ${req.params.id} not found`);
@@ -82,14 +87,15 @@ class SubmissionsController {
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
+    const submissionId = Number(req.params.id);
     const submission = await this.submissionsService.delete({
-      id: req.params.id,
+      id: submissionId,
     });
     if (!submission) {
-      this.logger.error(`Submission with id ${req.params.id} not found`);
+      this.logger.error(`Submission with id ${submissionId} not found`);
       return next(createHttpError.NotFound("submission not found"));
     }
-    this.logger.info(`Deleted submission with id: ${req.params.id}`);
+    this.logger.info(`Deleted submission with id: ${submissionId}`);
     return res.json(submission);
   }
 }

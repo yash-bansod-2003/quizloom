@@ -16,13 +16,17 @@ class AnswersController {
     this.logger.debug("creating answer");
     const { questionId, ...rest } = req.body as CreateAnswerDto;
     try {
-      const question = await this.questionsService.findOne({ id: questionId });
+      const question = await this.questionsService.findOne({
+        where: { id: questionId },
+      });
 
       if (!question) {
         this.logger.error("question not found");
         throw createHttpError.NotFound("question not found");
       }
+
       const answer = await this.answersService.create({ ...rest, question });
+
       if (!answer) {
         this.logger.error("answer not created");
         throw createHttpError.InternalServerError("answer not created");
@@ -39,7 +43,7 @@ class AnswersController {
   async findAll(req: Request, res: Response, next: NextFunction) {
     this.logger.debug("finding all answers");
     try {
-      const answers = await this.answersService.findAll();
+      const answers = await this.answersService.findAll({ where: req.query });
       this.logger.debug("answers found");
       res.json(answers);
     } catch (error) {
@@ -52,7 +56,7 @@ class AnswersController {
     this.logger.debug("finding answer");
     try {
       const answer = await this.answersService.findOne({
-        id: req.params.id,
+        where: { id: Number(req.params.id) },
       });
       if (!answer) {
         this.logger.error("answer not found");
@@ -70,7 +74,7 @@ class AnswersController {
     this.logger.debug("updating answer");
     try {
       const answer = await this.answersService.update(
-        { id: req.params.id },
+        { id: Number(req.params.id) },
         req.body as UpdateAnswerDto,
       );
       if (!answer) {
@@ -89,7 +93,7 @@ class AnswersController {
     this.logger.debug("deleting answer");
     try {
       const answer = await this.answersService.delete({
-        id: req.params.id,
+        id: Number(req.params.id),
       });
       if (!answer) {
         this.logger.error("answer not deleted");

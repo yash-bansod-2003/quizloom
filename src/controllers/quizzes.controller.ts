@@ -53,12 +53,13 @@ class QuizzesController {
     }
     this.logger.info(`Fetching all quizzes for user ${userId}`);
     const quizzes = await this.quizzesService.findAll({
-      user: { id: user.id },
+      where: { user: { id: user.id } },
     });
     return res.json(quizzes);
   }
 
   async findOne(req: Request, res: Response, next: NextFunction) {
+    const quizId = Number(req.params.id);
     const userId = (req as AuthenticatedRequest).user.sub;
     const user = await this.usersService.findOne({
       where: { id: Number(userId) },
@@ -68,13 +69,16 @@ class QuizzesController {
     }
     this.logger.info(`Fetching quiz ${req.params.id} for user ${userId}`);
     const quiz = await this.quizzesService.findOne({
-      id: req.params.id,
-      user: { id: user.id },
+      where: {
+        id: quizId,
+        user: { id: user.id },
+      },
     });
     return res.json(quiz);
   }
 
   async update(req: Request, res: Response, next: NextFunction) {
+    const quizId = Number(req.params.id);
     const userId = (req as AuthenticatedRequest).user.sub;
     const user = await this.usersService.findOne({
       where: { id: Number(userId) },
@@ -84,13 +88,14 @@ class QuizzesController {
     }
     this.logger.info(`Updating quiz ${req.params.id} for user ${userId}`);
     const quiz = await this.quizzesService.update(
-      { id: req.params.id, user: { id: user.id } },
+      { id: quizId, user: { id: user.id } },
       req.body as UpdateQuizDto,
     );
     return res.json(quiz);
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
+    const quizId = Number(req.params.id);
     const userId = (req as AuthenticatedRequest).user.sub;
     const user = await this.usersService.findOne({
       where: { id: Number(userId) },
@@ -98,9 +103,9 @@ class QuizzesController {
     if (!user) {
       return next(createHttpError.NotFound());
     }
-    this.logger.info(`Deleting quiz ${req.params.id} for user ${userId}`);
+    this.logger.info(`Deleting quiz ${quizId} for user ${userId}`);
     const quiz = await this.quizzesService.delete({
-      id: req.params.id,
+      id: quizId,
       user: { id: user.id },
     });
     return res.json(quiz);

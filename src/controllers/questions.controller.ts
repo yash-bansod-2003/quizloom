@@ -18,7 +18,7 @@ class QuestionsController {
         `Creating new question with data: ${JSON.stringify(req.body)}`,
       );
       const { quizId, ...questionData } = req.body as CreateQuestionDto;
-      const quiz = await this.quizzesService.findOne({ id: quizId });
+      const quiz = await this.quizzesService.findOne({ where: { id: quizId } });
 
       if (!quiz) {
         this.logger.error(`Quiz with id ${quizId} not found`);
@@ -59,9 +59,11 @@ class QuestionsController {
 
   async findOne(req: Request, res: Response, next: NextFunction) {
     try {
-      const questionId = req.params.id;
+      const questionId = Number(req.params.id);
       this.logger.info(`Fetching question with id: ${questionId}`);
-      const question = await this.questionsService.findOne({ id: questionId });
+      const question = await this.questionsService.findOne({
+        where: { id: questionId },
+      });
 
       if (!question) {
         this.logger.error(`Question with id ${questionId} not found`);
@@ -79,7 +81,7 @@ class QuestionsController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const questionId = req.params.id;
+      const questionId = Number(req.params.id);
       this.logger.info(
         `Updating question with id: ${questionId} with data: ${JSON.stringify(req.body)}`,
       );
@@ -105,7 +107,7 @@ class QuestionsController {
 
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
-      const questionId = req.params.id;
+      const questionId = Number(req.params.id);
       this.logger.info(`Deleting question with id: ${questionId}`);
       const deletedQuestion = await this.questionsService.delete({
         id: questionId,

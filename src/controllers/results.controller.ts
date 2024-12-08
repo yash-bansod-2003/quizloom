@@ -34,15 +34,17 @@ class ResultsController {
 
       const { quizId } = req.body as CreateResultDto;
 
-      const quiz = await this.quizzesService.findOne({ id: quizId });
+      const quiz = await this.quizzesService.findOne({ where: { id: quizId } });
 
       if (!quiz) {
         throw createHttpError.NotFound("quiz not found");
       }
 
       const submissions = await this.submissionsService.findAll({
-        user: { id: user.id },
-        quiz: { id: quiz.id },
+        where: {
+          user: { id: user.id },
+          quiz: { id: quiz.id },
+        },
       });
 
       if (!submissions) {
@@ -78,10 +80,11 @@ class ResultsController {
   }
 
   async findOne(req: Request, res: Response, next: NextFunction) {
-    this.logger.info(`finding result with id: ${req.params.id}`);
+    const resultId = Number(req.params.id);
+    this.logger.info(`finding result with id: ${resultId}`);
     try {
       const result = await this.resultsService.findOne({
-        id: req.params.id,
+        where: { resultId },
       });
 
       if (!result) {
@@ -98,10 +101,11 @@ class ResultsController {
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
-    this.logger.info(`deleting result with id: ${req.params.id}`);
+    const resultId = Number(req.params.id);
+    this.logger.info(`deleting result with id: ${resultId}`);
     try {
       const result = await this.resultsService.delete({
-        id: req.params.id,
+        resultId: resultId,
       });
 
       if (!result) {

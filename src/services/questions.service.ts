@@ -1,35 +1,43 @@
 import { Question } from "@/models/Question.js";
-import { DeepPartial, DeleteResult, Repository, UpdateResult } from "typeorm";
+import {
+  DeepPartial,
+  DeleteResult,
+  Repository,
+  UpdateResult,
+  SaveOptions,
+  FindManyOptions,
+  FindOneOptions,
+  FindOptionsWhere,
+} from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity.js";
 
 class QuestionsService {
-  constructor(private readonly questionsRepository: Repository<Question>) {}
-  async create(createQuestionDto: DeepPartial<Question>) {
-    return await this.questionsRepository.save(createQuestionDto);
+  constructor(private readonly usersRepository: Repository<Question>) {}
+
+  async create(
+    createQuestionDto: DeepPartial<Question>,
+    options?: SaveOptions,
+  ) {
+    return await this.usersRepository.save(createQuestionDto, options);
   }
 
-  findAll(): Promise<Question[]> {
-    return this.questionsRepository.find({
-      relations: { answers: true, quiz: true },
-    });
+  async findAll(options?: FindManyOptions<Question>): Promise<Question[]> {
+    return this.usersRepository.find(options);
   }
 
-  findOne(expression: Record<string, unknown>): Promise<Question | null> {
-    return this.questionsRepository.findOne({
-      where: expression,
-      relations: { quiz: true, answers: true },
-    });
+  async findOne(options: FindOneOptions<Question>): Promise<Question | null> {
+    return this.usersRepository.findOne(options);
   }
 
-  update(
-    expression: Record<string, unknown>,
+  async update(
+    options: FindOptionsWhere<Question>,
     updateQuestionDto: QueryDeepPartialEntity<Question>,
   ): Promise<UpdateResult> {
-    return this.questionsRepository.update(expression, updateQuestionDto);
+    return this.usersRepository.update(options, updateQuestionDto);
   }
 
-  delete(expression: Record<string, unknown>): Promise<DeleteResult> {
-    return this.questionsRepository.delete(expression);
+  async delete(criteria: FindOptionsWhere<Question>): Promise<DeleteResult> {
+    return this.usersRepository.delete(criteria);
   }
 }
 

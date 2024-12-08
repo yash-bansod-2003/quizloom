@@ -21,7 +21,7 @@ const refreshTokensService = new TokensService(
   configuration.jwt.secret.refresh,
   refreshTokensRepository,
 );
-const forgotPasswordTokensService = new TokensService(
+const verificationTokensService = new TokensService(
   configuration.jwt.secret.forgot_password,
 );
 const usersService = new UsersService(usersRepository);
@@ -33,7 +33,7 @@ const authenticationController = new AutenticationController(
   accessTokensService,
   refreshTokensService,
   mailService,
-  forgotPasswordTokensService,
+  verificationTokensService,
   logger,
 );
 

@@ -1,32 +1,40 @@
 import { Answer } from "@/models/Answer.js";
-import { DeepPartial, DeleteResult, Repository, UpdateResult } from "typeorm";
+import {
+  DeepPartial,
+  DeleteResult,
+  FindManyOptions,
+  FindOneOptions,
+  Repository,
+  SaveOptions,
+  UpdateResult,
+  FindOptionsWhere,
+} from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity.js";
 
 class AnswersService {
   constructor(private readonly answersRepository: Repository<Answer>) {}
-  async create(createAnswerDto: DeepPartial<Answer>) {
-    return await this.answersRepository.save(createAnswerDto);
+
+  async create(createAnswerDto: DeepPartial<Answer>, options?: SaveOptions) {
+    return await this.answersRepository.save(createAnswerDto, options);
   }
 
-  findAll(): Promise<Answer[]> {
-    return this.answersRepository.find();
+  async findAll(options?: FindManyOptions<Answer>): Promise<Answer[]> {
+    return await this.answersRepository.find(options);
   }
 
-  findOne(expression: Record<string, unknown>): Promise<Answer | null> {
-    return this.answersRepository.findOne({
-      where: expression,
-    });
+  async findOne(options: FindOneOptions<Answer>): Promise<Answer | null> {
+    return await this.answersRepository.findOne(options);
   }
 
-  update(
-    expression: Record<string, unknown>,
+  async update(
+    options: FindOptionsWhere<Answer>,
     updateAnswerDto: QueryDeepPartialEntity<Answer>,
   ): Promise<UpdateResult> {
-    return this.answersRepository.update(expression, updateAnswerDto);
+    return await this.answersRepository.update(options, updateAnswerDto);
   }
 
-  delete(expression: Record<string, unknown>): Promise<DeleteResult> {
-    return this.answersRepository.delete(expression);
+  async delete(criteria: FindOptionsWhere<Answer>): Promise<DeleteResult> {
+    return await this.answersRepository.delete(criteria);
   }
 }
 

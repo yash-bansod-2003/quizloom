@@ -13,27 +13,28 @@ import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity
 
 class UsersService {
   constructor(private readonly usersRepository: Repository<User>) {}
+
   async create(createUserDto: DeepPartial<User>, options?: SaveOptions) {
     return await this.usersRepository.save(createUserDto, options);
   }
 
-  findAll(options?: FindManyOptions<User>): Promise<User[]> {
-    return this.usersRepository.find(options);
+  async findAll(options?: FindManyOptions<User>): Promise<User[]> {
+    return await this.usersRepository.find(options);
   }
 
-  findOne(options: FindOneOptions<User>): Promise<User | null> {
-    return this.usersRepository.findOne(options);
+  async findOne(options: FindOneOptions<User>): Promise<User | null> {
+    return await this.usersRepository.findOne(options);
   }
 
-  update(
-    expression: Record<string, string>,
+  async update(
+    options: FindOptionsWhere<User>,
     updateUserDto: QueryDeepPartialEntity<User>,
   ): Promise<UpdateResult> {
-    return this.usersRepository.update(expression, updateUserDto);
+    return await this.usersRepository.update(options, updateUserDto);
   }
 
-  delete(criteria: FindOptionsWhere<User>): Promise<DeleteResult> {
-    return this.usersRepository.delete(criteria);
+  async delete(criteria: FindOptionsWhere<User>): Promise<DeleteResult> {
+    return await this.usersRepository.delete(criteria);
   }
 }
 

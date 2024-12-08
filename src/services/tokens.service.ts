@@ -1,5 +1,5 @@
 import { RefreshToken } from "@/models/RefreshToken.js";
-import * as jwt from "jsonwebtoken";
+import JsonWebToken from "jsonwebtoken";
 import {
   DeepPartial,
   DeleteResult,
@@ -22,8 +22,11 @@ class TokenService {
    * @param options Options for the token.
    * @returns The signed token.
    */
-  sign(payload: jwt.JwtPayload, options: jwt.SignOptions = {}): string {
-    return jwt.sign(payload, this.secret, options);
+  sign(
+    payload: JsonWebToken.JwtPayload,
+    options: JsonWebToken.SignOptions = {},
+  ): string {
+    return JsonWebToken.sign(payload, this.secret, options);
   }
 
   /**
@@ -31,8 +34,8 @@ class TokenService {
    * @param token The token to verify.
    * @returns The decoded payload, or string if the token is invalid.
    */
-  verify(token: string): jwt.JwtPayload | string {
-    return jwt.verify(token, this.secret);
+  verify(token: string): JsonWebToken.JwtPayload | string {
+    return JsonWebToken.verify(token, this.secret);
   }
 
   async create(
