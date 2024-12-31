@@ -22,7 +22,7 @@ RUN npm install --ignore-scripts --omit=dev \
   && npm uninstall bcrypt \
   && npm install bcrypt
 
-COPY --from=builder /build/dist ./dist/
+COPY --from=builder /build/dist/* ./
 
 EXPOSE 5001
 
