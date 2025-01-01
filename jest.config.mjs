@@ -4,6 +4,9 @@ const config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
+  transform: {
+    "^.+\\.(t|j)sx?$": ["@swc/jest"],
+  },
   preset: "ts-jest",
   clearMocks: true,
   verbose: true,

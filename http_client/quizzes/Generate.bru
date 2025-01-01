@@ -1,0 +1,22 @@
+meta {
+  name: Generate
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:5001/quizzes/generate
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3Mjc4NjcwMzV9.EblhUijUGNgfXuFYChIS2w7TJFQohjxFZDRj9yCfQPE
+}
+
+body:json {
+  {
+    "name" : "computer components",
+    "description" : "introduce components of computers"
+  }
+}

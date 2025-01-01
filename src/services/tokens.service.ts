@@ -1,48 +1,66 @@
+import { RefreshToken } from "@/models/RefreshToken.js";
 import JsonWebToken from "jsonwebtoken";
-import fs from "node:fs";
-import JwksRsa from "jwks-rsa";
-import configuration from "@/config/configuration";
+import {
+  DeepPartial,
+  DeleteResult,
+  FindOneOptions,
+  FindOptionsWhere,
+  Repository,
+} from "typeorm";
 
-abstract class TokensService {
-  abstract generate(payload: JsonWebToken.JwtPayload): string;
-  abstract verify(token: string): JsonWebToken.JwtPayload | string;
-}
-
-class AccessTokensService extends TokensService {
-  generate(payload: JsonWebToken.JwtPayload): string {
-    const privateKey = fs.readFileSync("certs/private.pem");
-    if (!privateKey) {
-      throw new Error("private key not found");
-    }
-    const accessToken = JsonWebToken.sign(payload, privateKey, {
-      algorithm: "RS256",
-      expiresIn: "1h",
-      issuer: "food_authentication",
-    });
-    return accessToken;
+class TokenService {
+  constructor(
+    private readonly secret: string,
+    private readonly refreshTokensRepository?: Repository<RefreshToken>,
+  ) {
+    this.secret = secret;
   }
 
-  async verify(token: string): Promise<JsonWebToken.JwtPayload | string> {
-    const client = JwksRsa({
-      jwksUri: configuration.jwks_uri!,
-      cache: true,
-      rateLimit: true,
-    });
-    const key = await client.getSigningKey();
-    const signingKey = key.getPublicKey();
-    return JsonWebToken.verify(token, signingKey);
-  }
-}
-
-class RefreshTokensService extends TokensService {
-  generate(payload: JsonWebToken.JwtPayload): string {
-    const accessToken = JsonWebToken.sign(payload, "secret");
-    return accessToken;
+  /**
+   * Signs a token with the provided payload and options.
+   * @param payload The payload to sign.
+   * @param options Options for the token.
+   * @returns The signed token.
+   */
+  sign(
+    payload: JsonWebToken.JwtPayload,
+    options: JsonWebToken.SignOptions = {},
+  ): string {
+    return JsonWebToken.sign(payload, this.secret, options);
   }
 
+  /**
+   * Verifies a token and returns the decoded payload.
+   * @param token The token to verify.
+   * @returns The decoded payload, or string if the token is invalid.
+   */
   verify(token: string): JsonWebToken.JwtPayload | string {
-    return JsonWebToken.verify(token, "secret");
+    return JsonWebToken.verify(token, this.secret);
+  }
+
+  async create(
+    createRefreshTokenDto: DeepPartial<RefreshToken>,
+  ): Promise<RefreshToken | undefined> {
+    if (this.refreshTokensRepository) {
+      return await this.refreshTokensRepository.save(createRefreshTokenDto);
+    }
+  }
+
+  async findOne(
+    options: FindOneOptions<RefreshToken>,
+  ): Promise<RefreshToken | null | undefined> {
+    if (this.refreshTokensRepository) {
+      return this.refreshTokensRepository.findOne(options);
+    }
+  }
+
+  async delete(
+    criteria: FindOptionsWhere<RefreshToken>,
+  ): Promise<DeleteResult | undefined> {
+    if (this.refreshTokensRepository) {
+      return this.refreshTokensRepository.delete(criteria);
+    }
   }
 }
 
-export { AccessTokensService, RefreshTokensService };
+export default TokenService;

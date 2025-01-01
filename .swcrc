@@ -1,4 +1,5 @@
 {
+  "$schema": "https://swc.rs/schema.json",
   "jsc": {
     "parser": {
       "syntax": "typescript",
@@ -6,17 +7,16 @@
       "dynamicImport": true,
       "decorators": true
     },
-    "transform": {
-      "legacyDecorator": true,
-      "decoratorMetadata": true
-    },
-    "target": "es5",
+    "target": "es2022",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
   "module": {
-    "type": "commonjs"
-  }
+    "type": "es6",
+    "strict": true
+  },
+  "sourceMaps": true,
+  "exclude": ["migrations"]
 }

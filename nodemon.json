@@ -1,0 +1,10 @@
+{
+  "watch": [
+    "src"
+  ],
+  "ext": "ts",
+  "ignore": [
+    "src/**/*.test.ts"
+  ],
+  "exec": "cross-env NODE_ENV=development tsx -r tsconfig-paths/register src/index.ts"
+}

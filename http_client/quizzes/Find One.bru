@@ -1,0 +1,15 @@
+meta {
+  name: Find One
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:5001/quizzes/1
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3Mjc4NjcwMzV9.EblhUijUGNgfXuFYChIS2w7TJFQohjxFZDRj9yCfQPE
+}
