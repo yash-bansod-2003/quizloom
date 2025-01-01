@@ -17,6 +17,9 @@ export class Result {
   @Column({ type: "int" })
   score: number;
 
+  @Column({ type: "int", default: 1 })
+  attempt: number;
+
   @CreateDateColumn()
   created_at: Date;
 

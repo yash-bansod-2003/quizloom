@@ -55,11 +55,25 @@ class SubmissionsController {
       return next(createHttpError.NotFound("answer not found"));
     }
 
+    const previousSubmissions = await this.submissionsService.findAll({
+      where: {
+        user: { id: user.id },
+        quiz: { id: quiz.id },
+        question: { id: question.id },
+      },
+    });
+
+    const attempt =
+      previousSubmissions.length > 0
+        ? Math.max(...previousSubmissions.map((sub) => sub.attempt)) + 1
+        : 1;
+
     const Submission = await this.submissionsService.create({
       user,
       quiz,
       question,
       answer,
+      attempt,
     });
     this.logger.info(`Created new submission with id: ${Submission.id}`);
     return res.status(201).json(Submission);
@@ -67,7 +81,7 @@ class SubmissionsController {
 
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const submissions = await this.submissionsService.findAll();
+      const submissions = await this.submissionsService.findAll(req.query);
       return res.json(submissions);
     } catch (error) {
       next(error);

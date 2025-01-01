@@ -55,12 +55,22 @@ class ResultsController {
         return acc + (submission.answer.is_correct ? 1 : 0);
       }, 0);
 
+      const previousResults = await this.resultsService.findAll({
+        where: {
+          user: { id: user.id },
+          quiz: { id: quiz.id },
+        },
+      });
+
+      const attempt = previousResults.length + 1;
+
       this.logger.info(`creating new result with score: ${score}`);
 
       const Result = await this.resultsService.create({
         user,
         quiz,
         score,
+        attempt,
       });
       res.status(201).json(Result);
     } catch (error) {

@@ -17,6 +17,5 @@
     "type": "es6",
     "strict": true
   },
-  "sourceMaps": true,
-  "exclude": ["migrations"]
+  "sourceMaps": true
 }

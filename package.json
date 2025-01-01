@@ -13,8 +13,8 @@
       "prepare": "husky",
       "test": "jest",
       "typeorm": "typeorm-ts-node-esm",
-      "migration:generate": "cross-env NODE_ENV=development typeorm-ts-node-esm -d src/data-source.ts migration:generate",
-      "migration:run": "cross-env NODE_ENV=development typeorm-ts-node-esm -d src/data-source.ts migration:run"
+      "migration:generate": "cross-env NODE_ENV=development npx typeorm-ts-node-esm migration:generate",
+      "migration:run": "cross-env NODE_ENV=development typeorm-ts-node-esm migration:run"
    },
    "keywords": [
       "quiz"
@@ -47,6 +47,7 @@
       "prettier": "3.4.2",
       "supertest": "^7.0.0",
       "ts-jest": "^29.2.5",
+      "ts-node": "^10.9.2",
       "tsconfig-paths": "^4.2.0",
       "tsx": "^4.19.2",
       "typescript": "5.7.2",

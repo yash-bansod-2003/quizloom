@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  Column,
 } from "typeorm";
 import { User } from "@/models/User.js";
 import { Question } from "@/models/Question.js";
@@ -14,6 +15,9 @@ import { Answer } from "@/models/Answer.js";
 export class Submission {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: "int", default: 1 })
+  attempt: number;
 
   @CreateDateColumn()
   created_at: number;
