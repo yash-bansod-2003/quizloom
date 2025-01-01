@@ -1,5 +1,5 @@
 name: GitHub Actions QuizLoom
-run-name: ${{ github.actor }} is running QuizLoom GitHub Actions 🚀
+run-name: ${{ github.actor }} is running Quizloom GitHub Actions 🚀
 
 on:
   pull_request:
