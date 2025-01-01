@@ -39,9 +39,10 @@ class Aiservice {
     markdown: string,
   ): Record<string, unknown> | null {
     try {
-      const jsonMatch = markdown.match(/```json\s*([\s\S]*?)\s*```/);
+      const jsonRegex = /```json\s*([\s\S]*?)\s*```/;
+      const jsonMatch = jsonRegex.exec(markdown);
 
-      if (jsonMatch && jsonMatch[1]) {
+      if (jsonMatch?.[1]) {
         const jsonString = jsonMatch[1];
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const parsedJson = JSON.parse(jsonString);

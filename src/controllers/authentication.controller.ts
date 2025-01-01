@@ -187,8 +187,24 @@ class AuthenticationController {
         tokenOptions,
       );
 
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        domain: configuration.domain,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60,
+        secure: false,
+      });
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        domain: configuration.domain,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+        secure: false,
+      });
+
       this.logger.debug("login user successfully");
-      return res.json({ accessToken, refreshToken });
+      return res.json({ id: user.id });
     } catch (error) {
       this.logger.error("login user failed", error);
       next(createError.InternalServerError());
@@ -323,7 +339,7 @@ class AuthenticationController {
   }
 
   async refresh(req: Request, res: Response, next: NextFunction) {
-    const { refreshToken } = req.body as Record<string, string>;
+    const { refreshToken } = req.cookies as Record<string, string>;
     this.logger.debug(`initiate refresh token process`);
 
     try {
@@ -387,8 +403,24 @@ class AuthenticationController {
         tokenOptions,
       );
 
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        domain: configuration.domain,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60,
+        secure: false,
+      });
+
+      res.cookie("refreshToken", refreshTokenNew, {
+        httpOnly: true,
+        domain: configuration.domain,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+        secure: false,
+      });
+
       this.logger.debug("token refreshed successfully");
-      return res.json({ accessToken, refreshToken: refreshTokenNew });
+      return res.json({ id: user.id });
     } catch (error) {
       this.logger.debug(error);
       return next(error);

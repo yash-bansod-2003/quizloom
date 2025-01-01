@@ -4,8 +4,9 @@ import TokensService from "@/services/tokens.service.js";
 import configuration from "@/config/configuration.js";
 const accessTokensService = new TokensService(configuration.jwt.secret.access);
 const authenticate = (req: Request, res: Response, next: NextFunction) => {
-  const authenticationHeader = req.headers.authorization;
-  const authenticationToken = authenticationHeader?.split(" ")[1];
+  const cookies = req.cookies as Record<string, string>;
+  const authenticationToken = cookies["accessToken"];
+
   if (!authenticationToken) {
     return next(createHttpError.Unauthorized());
   }

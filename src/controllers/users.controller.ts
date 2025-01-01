@@ -3,17 +3,24 @@ import { Logger } from "winston";
 import createError from "http-errors";
 import UsersService from "@/services/users.service.js";
 import { CreateUserDto, UpdateUserDto } from "@/dto/users.js";
+import HashingService from "@/services/hashing.service.js";
 
 class UsersController {
   constructor(
     private readonly usersService: UsersService,
+    private readonly hashingService: HashingService,
     private readonly logger: Logger,
   ) {}
 
   async create(req: Request, res: Response, next: NextFunction) {
     this.logger.debug("creating user", { ...req.body, password: "******" });
     try {
-      const user = await this.usersService.create(req.body as CreateUserDto);
+      const createUserDto = req.body as CreateUserDto;
+      const password = await this.hashingService.hash(createUserDto.password);
+      const user = await this.usersService.create({
+        password,
+        ...createUserDto,
+      });
       if (!user) {
         this.logger.debug("user not created");
         throw createError("user not created");

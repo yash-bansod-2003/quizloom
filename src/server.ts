@@ -2,6 +2,7 @@ import "reflect-metadata";
 import express, { Express } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import usersRouter from "@/routes/users.router.js";
 import authRouter from "@/routes/auth.router.js";
@@ -20,6 +21,7 @@ export const createServer = (): Express => {
     .use(helmet({ contentSecurityPolicy: false }))
     .use(cors({ origin: configuration.domain }))
     .use(morgan("dev"))
+    .use(cookieParser())
     .use(express.json())
     .use(express.static("public"))
     .get("/status", (_, res) => {
