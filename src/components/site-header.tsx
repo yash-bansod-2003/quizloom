@@ -14,7 +14,7 @@ export function SiteHeader() {
         <MainNav />
         <MobileNav />
         <div className="flex flex-1 items-center justify-end space-x-2 md:justify-end">
-          <nav className="flex items-center">
+          <nav className="flex items-center gap-4">
             <Link to={siteConfig.links.github} target="_blank" rel="noreferrer">
               <div
                 className={cn(
@@ -25,8 +25,15 @@ export function SiteHeader() {
                 )}
               >
                 <Icons.gitHub className="h-5 w-5" />
-                <span className="sr-only">Githun</span>
+                <span className="sr-only">Github</span>
               </div>
+            </Link>
+            <Link
+              to="/auth/login"
+              rel="noreferrer"
+              className={buttonVariants()}
+            >
+              Login
             </Link>
           </nav>
         </div>
