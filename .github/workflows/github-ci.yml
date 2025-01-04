@@ -28,7 +28,7 @@ jobs:
         run: npm run lint
 
       - name: Run Prettier for Code Formatting
-        run: npm run format
+        run: npm run format:fix
 
       - name: Build the Application
         run: npm run build
