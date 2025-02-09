@@ -1,7 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
 import { Outlet } from "react-router-dom";
 
-export default function AppLayout() {
+export default function RootLayout() {
   return (
     <>
       <SiteHeader />
