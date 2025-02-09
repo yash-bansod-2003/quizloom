@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quizloom-frontend-deployment
+  namespace: quizloom
+  labels:
+    app: quizloom-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quizloom-frontend
+  template:
+    metadata:
+      labels:
+        app: quizloom-frontend
+    spec:
+      containers:
+        - name: quizloom-frontend
+          image: yashbansod2003/quizloom:build-13
+          ports:
+            - containerPort: 80
