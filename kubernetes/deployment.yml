@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: quizloom-frontend
-          image: yashbansod2003/quizloom:build-17
+          image: yashbansod2003/quizloom:build-21
           ports:
             - containerPort: 80
