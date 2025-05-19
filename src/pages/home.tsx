@@ -58,7 +58,7 @@ export default function HomePage() {
           <div className="text-center space-y-8">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
               Test Your Knowledge with{" "}
-              <span className="text-primary">QuizLoom</span>
+              <span className="text-blue-400 underline">Quizloom</span>
             </h1>
             <p className="max-w-2xl mx-auto text-xl text-muted-foreground">
               Challenge yourself with engaging quizzes, track your progress, and

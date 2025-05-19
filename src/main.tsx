@@ -2,6 +2,7 @@ import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
+import { Toaster } from "@/components/ui/sonner";
 
 function Loading() {
   return <div>Loading...</div>;
@@ -23,8 +24,8 @@ const DashboardHomePage = lazy(() => import("@/pages/dashboard/home"));
 const DashboardSettingsPage = lazy(() => import("@/pages/dashboard/settings"));
 
 const Dashboard = lazy(() => import("@/pages/admin/Dashboard"));
-const QuizList = lazy(() => import("@/pages/admin/QuizList"));
-const QuizEditor = lazy(() => import("@/pages/admin/QuizEditor"));
+const QuizList = lazy(() => import("@/pages/dashboard/quizzes"));
+const QuizEditor = lazy(() => import("@/pages/dashboard/new-quiz"));
 const Settings = lazy(() => import("@/pages/admin/Settings"));
 
 const router = createBrowserRouter([
@@ -172,6 +173,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Suspense fallback={<Loading />}>
       <RouterProvider router={router} />
+      <Toaster />
     </Suspense>
   </StrictMode>,
 );
