@@ -1,3 +1,4 @@
+import * as React from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SectionCards } from "@/components/section-cards";
 import {
@@ -14,8 +15,19 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/hooks/use-auth";
+import { Outlet, useNavigate } from "react-router-dom";
 
 export default function Page() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  React.useEffect(() => {
+    if (!user) {
+      navigate("/auth/login");
+    }
+  }, [user, navigate]);
+
   return (
     <SidebarProvider
       style={
@@ -44,11 +56,7 @@ export default function Page() {
           </Breadcrumb>
         </header>
         <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <SectionCards />
-            </div>
-          </div>
+          <Outlet />
         </div>
       </SidebarInset>
     </SidebarProvider>

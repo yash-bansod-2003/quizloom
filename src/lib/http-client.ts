@@ -7,3 +7,8 @@ export const api = axios.create({
       },
       withCredentials: true,
 });
+
+export const profile = async () => {
+      const response = await api.get("/auth/profile");
+      return response.data;
+}

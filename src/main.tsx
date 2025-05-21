@@ -3,16 +3,13 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import { Toaster } from "@/components/ui/sonner";
-
-function Loading() {
-  return <div>Loading...</div>;
-}
+import { AuthContextProvider } from "@/hooks/use-auth";
+import { Loading } from "@/components/loading";
 
 const RootLayout = lazy(() => import("@/layouts/root.js"));
 const AppLayout = lazy(() => import("@/layouts/app"));
 const AuthenticationLayout = lazy(() => import("@/layouts/authentication"));
 const DashboardLayout = lazy(() => import("@/layouts/dashboard"));
-const AdminLayout = lazy(() => import("@/layouts/admin"));
 
 const LoginPage = lazy(() => import("@/pages/auth/login"));
 const RegisterPage = lazy(() => import("@/pages/auth/register"));
@@ -21,12 +18,8 @@ const HomePage = lazy(() => import("@/pages/home"));
 const AboutPage = lazy(() => import("@/pages/about"));
 
 const DashboardHomePage = lazy(() => import("@/pages/dashboard/home"));
+const DashboardQuizzesPage = lazy(() => import("@/pages/dashboard/quizzes"));
 const DashboardSettingsPage = lazy(() => import("@/pages/dashboard/settings"));
-
-const Dashboard = lazy(() => import("@/pages/admin/Dashboard"));
-const QuizList = lazy(() => import("@/pages/dashboard/quizzes"));
-const QuizEditor = lazy(() => import("@/pages/dashboard/new-quiz"));
-const Settings = lazy(() => import("@/pages/admin/Settings"));
 
 const router = createBrowserRouter([
   {
@@ -113,53 +106,11 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
-        ],
-      },
-      {
-        path: "/admin",
-        element: (
-          <Suspense fallback={<Loading />}>
-            <AdminLayout />
-          </Suspense>
-        ),
-        children: [
           {
-            index: true,
+            path: "/dashboard/quizzes",
             element: (
               <Suspense fallback={<Loading />}>
-                <Dashboard />
-              </Suspense>
-            ),
-          },
-          {
-            path: "quizzes",
-            element: (
-              <Suspense fallback={<Loading />}>
-                <QuizList />
-              </Suspense>
-            ),
-          },
-          {
-            path: "quizzes/new",
-            element: (
-              <Suspense fallback={<Loading />}>
-                <QuizEditor />
-              </Suspense>
-            ),
-          },
-          {
-            path: "quizzes/:id/edit",
-            element: (
-              <Suspense fallback={<Loading />}>
-                <QuizEditor />
-              </Suspense>
-            ),
-          },
-          {
-            path: "settings",
-            element: (
-              <Suspense fallback={<Loading />}>
-                <Settings />
+                <DashboardQuizzesPage />
               </Suspense>
             ),
           },
@@ -172,8 +123,10 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Suspense fallback={<Loading />}>
-      <RouterProvider router={router} />
-      <Toaster />
+      <AuthContextProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+      </AuthContextProvider>
     </Suspense>
   </StrictMode>,
 );
