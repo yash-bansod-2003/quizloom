@@ -5,6 +5,8 @@ import "./index.css";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthContextProvider } from "@/hooks/use-auth";
 import { Loading } from "@/components/loading";
+import { Provider } from "react-redux";
+import { store } from "@/store";
 
 const RootLayout = lazy(() => import("@/layouts/root.js"));
 const AppLayout = lazy(() => import("@/layouts/app"));
@@ -123,10 +125,13 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Suspense fallback={<Loading />}>
-      <AuthContextProvider>
-        <RouterProvider router={router} />
-        <Toaster />
-      </AuthContextProvider>
+      <Provider store={store}>
+        <AuthContextProvider>
+          <RouterProvider router={router} />
+          <Toaster />
+        </AuthContextProvider>
+      </Provider>
+      ,
     </Suspense>
   </StrictMode>,
 );

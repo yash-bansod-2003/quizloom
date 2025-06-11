@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { api } from "@/lib/http-client";
 import { ErrorResponse } from "@/types";
+import { authClient } from "@/lib/auth-client";
 
 const formSchema = z
   .object({
@@ -61,19 +62,19 @@ export function RegisterForm() {
         return;
       }
 
-      const response = await api.post("/auth/register", {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        password: values.password,
-      });
-
-      if (response.status === 200) {
-        toast.success("Register successfully!");
-        navigate("/auth/login");
-      } else {
-        toast.error((response.data as ErrorResponse).errors[0].message);
-      }
+      await authClient.signUp.email(
+        {
+          email: values.email,
+          password: values.password,
+          name: values.firstName + " " + values.lastName,
+          callbackURL: "/dashboard",
+        },
+        {
+          onError: (ctx) => {
+            toast.error(ctx.error.message);
+          },
+        },
+      );
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message ||

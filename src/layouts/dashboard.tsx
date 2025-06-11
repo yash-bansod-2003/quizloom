@@ -1,6 +1,5 @@
 import * as React from "react";
 import { AppSidebar } from "@/components/app-sidebar";
-import { SectionCards } from "@/components/section-cards";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,18 +14,18 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@/hooks/use-auth";
+import { useGetSessionQuery } from "@/services/authentication";
 import { Outlet, useNavigate } from "react-router-dom";
 
 export default function Page() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { data: session, isLoading } = useGetSessionQuery();
 
   React.useEffect(() => {
-    if (!user) {
+    if (!isLoading && !session) {
       navigate("/auth/login");
     }
-  }, [user, navigate]);
+  }, [navigate, isLoading, session]);
 
   return (
     <SidebarProvider

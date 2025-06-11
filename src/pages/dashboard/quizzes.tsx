@@ -1,62 +1,70 @@
-import * as React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Loader2 } from "lucide-react";
 import { DataTable } from "@/components/dashboard/tables/data-table";
 import { columns } from "@/components/dashboard/tables/columns";
-import { taskSchema } from "@/components/dashboard/tables/schema";
-import { api } from "@/lib/http-client";
-import { z } from "zod";
-
-interface Quiz {
-  id: number;
-  name: string;
-  description: string;
-  created_at: string;
-  updated_at: string;
-}
-
-async function getQuizzes() {
-  const response = await api.get("/quizzes");
-  if (response.status !== 200) {
-    throw new Error("Failed to fetch quizzes");
-  }
-  const formatedQuizzes = (response.data as Quiz[]).map((quiz) => ({
-    id: String(quiz.id),
-    title: quiz.name,
-    status: "done",
-    label: "feature",
-    priority: "high",
-    created_at: new Date(quiz.created_at).toLocaleDateString(),
-    updated_at: new Date(quiz.updated_at).toLocaleDateString(),
-  }));
-
-  return formatedQuizzes;
-}
+import { useGetQuizzesQuery } from "@/services/quizzes";
 
 export default function QuizzesPage() {
-  const [quizzes, setQuizzes] = React.useState<z.infer<typeof taskSchema>[]>(
-    [],
-  );
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const { data: quizzes, isLoading, isError, error } = useGetQuizzesQuery();
 
-  React.useEffect(() => {
-    const fetchQuizzes = async () => {
-      try {
-        setIsLoading(true);
-        const quizzes = await getQuizzes();
-        setQuizzes(quizzes);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching quizzes:", error);
-        setError("Failed to load quizzes. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchQuizzes();
-  }, []);
+  const getErrorMessage = () => {
+    if (error && typeof error === "object" && "message" in error) {
+      return error.message as string;
+    }
+    if (error && typeof error === "object" && "data" in error) {
+      return (
+        (error.data as any)?.message ||
+        "An error occurred while fetching quizzes"
+      );
+    }
+    return typeof error === "string"
+      ? error
+      : "An error occurred while fetching quizzes";
+  };
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex justify-center items-center h-64">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      );
+    }
+
+    if (isError) {
+      return (
+        <div className="flex justify-center items-center h-64 text-center">
+          <div className="space-y-2">
+            <p className="text-destructive">{getErrorMessage()}</p>
+            <Button
+              variant="outline"
+              onClick={() => window.location.reload()}
+              size="sm"
+            >
+              Try Again
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    if (!quizzes || quizzes.length === 0) {
+      return (
+        <div className="flex flex-col justify-center items-center h-64 text-center">
+          <p className="text-muted-foreground mb-4">No quizzes found</p>
+          <Button asChild>
+            <Link to="/admin/quizzes/new">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Create your first quiz
+            </Link>
+          </Button>
+        </div>
+      );
+    }
+
+    return <DataTable data={quizzes} columns={columns} />;
+  };
 
   return (
     <div className="w-full mx-auto px-4 py-2">
@@ -78,27 +86,7 @@ export default function QuizzesPage() {
       </div>
 
       <div className="bg-card rounded-lg border shadow-sm p-1 md:p-6">
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : error ? (
-          <div className="flex justify-center items-center h-64 text-center">
-            <p className="text-destructive">{error}</p>
-          </div>
-        ) : quizzes.length === 0 ? (
-          <div className="flex flex-col justify-center items-center h-64 text-center">
-            <p className="text-muted-foreground mb-4">No quizzes found</p>
-            <Button asChild>
-              <Link to="/admin/quizzes/new">
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Create your first quiz
-              </Link>
-            </Button>
-          </div>
-        ) : (
-          <DataTable data={quizzes} columns={columns} />
-        )}
+        {renderContent()}
       </div>
     </div>
   );
