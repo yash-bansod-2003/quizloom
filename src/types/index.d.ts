@@ -29,9 +29,16 @@ export interface Session {
     ipAddress: string;
     userAgent: string;
     userId: string;
-  }
+  };
   user: User;
 }
 
-export interface Quiz { status: string; id: string; title: string; label: string; priority: string; created_at: string; updated_at: string; }
-
+export interface Quiz {
+  status: string;
+  id: string;
+  title: string;
+  label: string;
+  priority: string;
+  created_at: string;
+  updated_at: string;
+}
