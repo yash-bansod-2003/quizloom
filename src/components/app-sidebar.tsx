@@ -17,7 +17,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
+
+import { NavUser } from "@/components/nav-user";
+import { useGetSessionQuery } from "@/services/authentication";
+import { Icons } from "./icons";
 
 const sidebarItems = [
   {
@@ -48,6 +53,7 @@ const sidebarItems = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data, isLoading } = useGetSessionQuery();
   return (
     <Sidebar variant="floating" {...props}>
       <SidebarHeader>
@@ -55,8 +61,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="/dashboard">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <GalleryVerticalEnd className="size-4" />
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <Icons.logo className="size-8" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">QuizLoom</span>
@@ -86,6 +92,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      {!isLoading && data && (
+        <SidebarFooter>
+          <NavUser user={data.user} />
+        </SidebarFooter>
+      )}
     </Sidebar>
   );
 }

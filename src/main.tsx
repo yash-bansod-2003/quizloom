@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { store } from "@/store";
 
 const RootLayout = lazy(() => import("@/layouts/root.js"));
+const AppLayout = lazy(() => import("@/layouts/app.js"));
 const AuthenticationLayout = lazy(() => import("@/layouts/authentication"));
 const DashboardLayout = lazy(() => import("@/layouts/dashboard"));
 

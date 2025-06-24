@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { ErrorResponse } from "@/types";
+import { authClient } from "@/lib/auth-client";
 
 import {
   Form,
@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { api } from "@/lib/http-client";
 import { Checkbox } from "@/components/ui/checkbox";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
@@ -47,17 +46,18 @@ export function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const response = await api.post("/auth/login", {
-        email: values.email,
-        password: values.password,
-      });
-
-      if (response.status === 200) {
-        toast.success("Logged in successfully!");
-        navigate("/dashboard");
-      } else {
-        toast.error((response.data as ErrorResponse).errors[0].message);
-      }
+      await authClient.signIn.email(
+        {
+          email: values.email,
+          password: values.password,
+          callbackURL: "/dashboard",
+        },
+        {
+          onError: (ctx) => {
+            toast.error(ctx.error.message);
+          },
+        },
+      );
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.message ||

@@ -54,7 +54,7 @@ export default function Page() {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-        <div className="flex flex-1 flex-col">
+        <div className="flex flex-1 flex-col p-3">
           <Outlet />
         </div>
       </SidebarInset>
