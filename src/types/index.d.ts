@@ -34,11 +34,33 @@ export interface Session {
 }
 
 export interface Quiz {
-  status: string;
   id: string;
   title: string;
-  label: string;
-  priority: string;
-  created_at: string;
-  updated_at: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Question {
+  id: string;
+  text: string;
+  // other fields...
+}
+
+export interface Answer {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+}
+
+export interface QuizSettings {
+  timeLimit?: number;
+  randomizeQuestions?: boolean;
+  // other settings...
+}
+
+export interface QuizResults {
+  averageScore: number;
+  totalAttempts: number;
+  // other result fields...
 }

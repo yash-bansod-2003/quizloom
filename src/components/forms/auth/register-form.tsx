@@ -14,8 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { api } from "@/lib/http-client";
-import { ErrorResponse } from "@/types";
 import { authClient } from "@/lib/auth-client";
 
 const formSchema = z

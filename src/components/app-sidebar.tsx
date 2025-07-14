@@ -6,7 +6,6 @@ import {
   Settings,
   Users,
   BarChart3,
-  GalleryVerticalEnd,
 } from "lucide-react";
 
 import {
