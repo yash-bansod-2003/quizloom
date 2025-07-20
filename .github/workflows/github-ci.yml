@@ -1,5 +1,5 @@
 name: Food Quizloom GitHub Actions
-run-name: ${{ github.actor }} is running Quizloom GitHub Actions 🚀
+run-name: running Quizloom GitHub Actions 🚀
 
 on:
   pull_request:
@@ -21,17 +21,22 @@ jobs:
         with:
           node-version: "22.12.0"
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       - name: Install dependencies
-        run: npm install
-
-      - name: Run ESLint
-        run: npm run lint
-
-      - name: Run Prettier for Code Formatting
-        run: npm run format:fix
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build the Application
-        run: npm run build
+        run: pnpm build
+
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run Prettier for Code Formatting
+        run: pnpm format
 
   deploy:
     name: Deploy to Docker

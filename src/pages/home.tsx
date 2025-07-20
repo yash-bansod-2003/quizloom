@@ -10,71 +10,70 @@ import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Brain,
-  Trophy,
   Users,
-  Timer,
   BarChart,
-  Star,
   Target,
-  Zap,
+  Shield,
+  Award,
+  CheckCircle,
 } from "lucide-react";
 
 const features = [
   {
     icon: Brain,
-    title: "Smart Quiz Engine",
+    title: "Adaptive Learning Engine",
     description:
-      "AI-powered adaptive quizzes that adjust to your learning pace and knowledge level for optimal challenge.",
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
-  },
-  {
-    icon: Timer,
-    title: "Lightning Challenges",
-    description:
-      "Quick-fire rounds and time-based challenges to sharpen your reflexes and test knowledge under pressure.",
-    color: "text-orange-500",
-    bgColor: "bg-orange-500/10",
-  },
-  {
-    icon: Trophy,
-    title: "Achievement Hub",
-    description:
-      "Unlock exclusive badges, earn XP points, and climb global leaderboards as you master new topics.",
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-500/10",
-  },
-  {
-    icon: Users,
-    title: "Community Learning",
-    description:
-      "Join study groups, participate in team challenges, and learn together with a vibrant community.",
-    color: "text-green-500",
-    bgColor: "bg-green-500/10",
+      "Enterprise-grade AI algorithms that personalize content delivery based on individual learning patterns and performance metrics.",
+    color: "text-blue-600",
+    bgColor: "bg-blue-50",
   },
   {
     icon: BarChart,
-    title: "Advanced Analytics",
+    title: "Performance Analytics",
     description:
-      "Detailed performance insights with personalized recommendations to accelerate your learning journey.",
-    color: "text-purple-500",
-    bgColor: "bg-purple-500/10",
+      "Comprehensive reporting dashboard with detailed insights, progress tracking, and data-driven recommendations for improvement.",
+    color: "text-emerald-600",
+    bgColor: "bg-emerald-50",
+  },
+  {
+    icon: Shield,
+    title: "Enterprise Security",
+    description:
+      "Bank-level encryption, GDPR compliance, and secure data handling to protect your learning progress and personal information.",
+    color: "text-slate-600",
+    bgColor: "bg-slate-50",
+  },
+  {
+    icon: Users,
+    title: "Collaborative Learning",
+    description:
+      "Professional learning communities with peer review, knowledge sharing, and structured group study sessions.",
+    color: "text-indigo-600",
+    bgColor: "bg-indigo-50",
   },
   {
     icon: Target,
-    title: "Personalized Goals",
+    title: "Goal Management",
     description:
-      "Set custom learning objectives and track your progress with intelligent milestone tracking.",
-    color: "text-pink-500",
-    bgColor: "bg-pink-500/10",
+      "Strategic learning path planning with milestone tracking, deadline management, and achievement certification.",
+    color: "text-purple-600",
+    bgColor: "bg-purple-50",
+  },
+  {
+    icon: Award,
+    title: "Professional Certification",
+    description:
+      "Industry-recognized certificates and digital badges that validate your expertise and enhance your professional profile.",
+    color: "text-amber-600",
+    bgColor: "bg-amber-50",
   },
 ];
 
 const stats = [
-  { number: "50K+", label: "Active Learners" },
-  { number: "10K+", label: "Quiz Questions" },
-  { number: "95%", label: "Success Rate" },
-  { number: "24/7", label: "Learning Support" },
+  { number: "100K+", label: "Professionals Trained" },
+  { number: "500+", label: "Enterprise Clients" },
+  { number: "98%", label: "Completion Rate" },
+  { number: "ISO 27001", label: "Security Certified" },
 ];
 
 export default function HomePage() {
@@ -91,19 +90,19 @@ export default function HomePage() {
           <div className="text-center space-y-12 max-w-5xl mx-auto">
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium text-primary">
-                <Zap className="w-4 h-4" />
-                <span>Powered by Advanced AI</span>
+                <Shield className="w-4 h-4" />
+                <span>Enterprise-Grade Learning Platform</span>
               </div>
               <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight">
-                Master Knowledge with{" "}
+                Accelerate Professional Growth with{" "}
                 <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
                   QuizLoom
                 </span>
               </h1>
               <p className="max-w-3xl mx-auto text-xl sm:text-2xl text-muted-foreground leading-relaxed">
-                Transform your learning experience with intelligent quizzes,
-                real-time progress tracking, and a community that grows with
-                you.
+                The comprehensive learning management system trusted by Fortune
+                500 companies to upskill teams, track progress, and drive
+                measurable results.
               </p>
             </div>
 
@@ -150,15 +149,17 @@ export default function HomePage() {
         <div className="container mx-auto">
           <div className="text-center mb-20 space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium text-primary">
-              <Star className="w-4 h-4" />
-              <span>Premium Features</span>
+              <CheckCircle className="w-4 h-4" />
+              <span>Enterprise Solutions</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Everything You Need to <span className="text-primary">Excel</span>
+              Built for{" "}
+              <span className="text-primary">Professional Excellence</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Our comprehensive platform combines cutting-edge technology with
-              proven learning methodologies.
+              Scalable learning infrastructure designed to meet the demanding
+              requirements of modern organizations and professional development
+              programs.
             </p>
           </div>
 
@@ -198,13 +199,14 @@ export default function HomePage() {
                   <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
                     Ready to{" "}
                     <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                      Transform
+                      Scale
                     </span>{" "}
-                    Your Learning?
+                    Your Organization?
                   </h2>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                    Join our growing community of passionate learners and
-                    discover a smarter way to master new knowledge.
+                    Join industry leaders who trust QuizLoom to deliver
+                    measurable learning outcomes and drive organizational
+                    excellence.
                   </p>
                 </div>
 
@@ -215,12 +217,12 @@ export default function HomePage() {
                     asChild
                   >
                     <Link to="/auth/register">
-                      Get Started Today
+                      Request Demo
                       <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
                   <p className="text-sm text-muted-foreground">
-                    Free forever • No credit card required
+                    Enterprise trial available • Implementation support included
                   </p>
                 </div>
               </div>

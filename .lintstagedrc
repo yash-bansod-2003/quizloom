@@ -1,5 +1,7 @@
 {
   "*.tsx": [
-    "npm run format"
+    "pnpm run build .",
+    "pnpm run lint",
+    "pnpm run format"
   ]
 }

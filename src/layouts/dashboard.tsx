@@ -1,63 +1,37 @@
-import * as React from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { MainNav } from "@/components/dashboard-nav";
+import { UserNav } from "@/components/user-nav";
 import { useGetSessionQuery } from "@/services/authentication";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Loading } from "@/components/loading";
+import { Navigate, Outlet } from "react-router-dom";
+import { ModeToggle } from "@/components/mode-toggle";
 
-export default function Page() {
-  const navigate = useNavigate();
-  const { data: session, isLoading } = useGetSessionQuery();
+export default function DashboardPage() {
+  const { isLoading, data: session } = useGetSessionQuery();
 
-  React.useEffect(() => {
-    if (!isLoading && !session) {
-      navigate("/auth/login");
-    }
-  }, [navigate, isLoading, session]);
+  if (!session && !isLoading) {
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "19rem",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">
-                  Building Your Application
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-        <div className="flex flex-1 flex-col p-3">
+    <>
+      <div className="hidden flex-col md:flex">
+        <div className="border-b">
+          <div className="flex h-16 items-center px-4">
+            <MainNav className="mx-6" />
+            <div className="ml-auto flex items-center space-x-4">
+              <ModeToggle />
+              {session?.user && <UserNav user={session.user} />}
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 space-y-4 p-8 pt-6">
           <Outlet />
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+    </>
   );
 }

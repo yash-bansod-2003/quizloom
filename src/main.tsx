@@ -9,17 +9,19 @@ import { AuthContextProvider } from "@/hooks/use-auth";
 import { Loading } from "@/components/loading";
 import { Provider } from "react-redux";
 import { store } from "@/store";
+import { ThemeProvider } from "@/components/theme-provider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Suspense fallback={<Loading />}>
       <Provider store={store}>
         <AuthContextProvider>
-          <RouterProvider router={router} />
-          <Toaster />
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <RouterProvider router={router} />
+            <Toaster />
+          </ThemeProvider>
         </AuthContextProvider>
       </Provider>
-      ,
     </Suspense>
   </StrictMode>,
 );
