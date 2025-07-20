@@ -6,8 +6,11 @@ import { MainNav } from "@/components/main-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "./icons";
+import { useGetSessionQuery } from "@/services/authentication";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function SiteHeader() {
+  const { data: session, isLoading } = useGetSessionQuery();
   return (
     <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -28,13 +31,20 @@ export function SiteHeader() {
                 <span className="sr-only">Github</span>
               </div>
             </Link>
-            <Link
-              to="/auth/login"
-              rel="noreferrer"
-              className={buttonVariants()}
-            >
-              Login
-            </Link>
+            {session && !isLoading ? (
+              <Avatar>
+                <AvatarImage src={session.user.image} />
+                <AvatarFallback>YB</AvatarFallback>
+              </Avatar>
+            ) : (
+              <Link
+                to="/auth/login"
+                rel="noreferrer"
+                className={buttonVariants()}
+              >
+                Login
+              </Link>
+            )}
           </nav>
         </div>
       </div>
