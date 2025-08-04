@@ -71,11 +71,9 @@ export function RegisterForm() {
           },
         },
       );
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        "Something went wrong. Please try again.";
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      console.error(error);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -62,10 +62,10 @@ jobs:
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
-      
+
       - name: Build and push
         run: docker build -t ${{ env.DOCKERIMAGE_NAME }}:${{ env.DOCKERIMAGE_TAG }} -f docker/production/Dockerfile .
-      
+
       - name: Push to DockerHub
         run: docker push ${{ env.DOCKERIMAGE_NAME }}:${{ env.DOCKERIMAGE_TAG }}
 

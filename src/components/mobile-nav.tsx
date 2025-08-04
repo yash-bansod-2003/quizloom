@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Link, LinkProps, useNavigate } from "react-router-dom";
+import { Link, type LinkProps, useNavigate } from "react-router-dom";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";

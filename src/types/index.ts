@@ -33,9 +33,14 @@ export interface Session {
   user: User;
 }
 
+export type QuizStatus = "DRAFT" | "LIVE" | "PAUSED" | "SCHEDULED" | "CLOSED";
+
 export interface Quiz {
   id: string;
   title: string;
+  image?: string;
+  bannerImage?: string;
+  status: QuizStatus;
   description: string;
   createdAt: string;
   updatedAt: string;

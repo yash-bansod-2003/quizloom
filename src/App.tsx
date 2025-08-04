@@ -1,6 +1,10 @@
 import { Suspense, lazy } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Loading } from "@/components/loading";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { store } from "./store";
+import { Provider } from "react-redux";
 
 const RootLayout = lazy(() => import("@/layouts/root.js"));
 const AppLayout = lazy(() => import("@/layouts/app.js"));
@@ -17,7 +21,7 @@ const DashboardHomePage = lazy(() => import("@/pages/dashboard/home"));
 const DashboardQuizzesPage = lazy(() => import("@/pages/dashboard/quizzes"));
 const DashboardSettingsPage = lazy(() => import("@/pages/dashboard/settings"));
 
-export const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: (
@@ -115,3 +119,16 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
+
+const App = () => {
+  return (
+    <Provider store={store}>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <RouterProvider router={router} />
+        <Toaster />
+      </ThemeProvider>
+    </Provider>
+  );
+};
+
+export default App;

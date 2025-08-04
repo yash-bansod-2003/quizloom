@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
-import { User } from "@/types";
+import { type User } from "@/types";
 
 export function UserNav({ user }: { user: User }) {
   return (
