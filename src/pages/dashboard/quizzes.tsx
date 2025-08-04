@@ -1,11 +1,15 @@
 import { useGetQuizzesQuery } from "@/services/quizzes";
+import { useGetQuestionsQuery } from "@/services/questions";
 import { Loading } from "@/components/loading";
 import { DataTable } from "@/components/dashboard/quizzes/data-table";
 import { columns } from "@/components/dashboard/quizzes/columns";
+import { columns as questionsColumns } from "@/components/dashboard/quizzes/questions/columns";
 
 const QuizzesPage = () => {
   const { data: quizzes, isLoading } = useGetQuizzesQuery();
-  if (isLoading) {
+  const { data: questions, isLoading: questionsLoading } =
+    useGetQuestionsQuery();
+  if (isLoading || questionsLoading) {
     return <Loading />;
   }
   return (
@@ -16,6 +20,7 @@ const QuizzesPage = () => {
       {quizzes && quizzes.length > 0 && (
         <DataTable data={quizzes} columns={columns} />
       )}
+      {questions && <DataTable data={questions} columns={questionsColumns} />}
     </>
   );
 };
