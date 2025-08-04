@@ -11,27 +11,27 @@ import {
 
 export const statuses = [
   {
-    value: "DRAFT",
+    value: "draft",
     label: "Draft",
     icon: Circle,
   },
   {
-    value: "LIVE",
+    value: "live",
     label: "Live",
     icon: Play,
   },
   {
-    value: "PAUSED",
+    value: "paused",
     label: "Paused",
     icon: Pause,
   },
   {
-    value: "SCHEDULED",
+    value: "scheduled",
     label: "Scheduled",
     icon: Calendar,
   },
   {
-    value: "CLOSED",
+    value: "closed",
     label: "Closed",
     icon: Archive,
   },

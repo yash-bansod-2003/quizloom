@@ -11,7 +11,7 @@ export const quizSchema = z.object({
   title: z.string(),
   image: z.string().optional(),
   bannerImage: z.string().optional(),
-  status: z.enum(["LIVE", "DRAFT", "PAUSED", "SCHEDULED", "CLOSED"]),
+  status: z.enum(["live", "draft", "paused", "scheduled", "closed"]),
   description: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),

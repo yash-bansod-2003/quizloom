@@ -1,7 +1,7 @@
 export const QuizStatus = {
-  DRAFT: "DRAFT",
-  LIVE: "LIVE",
-  PAUSED: "PAUSED",
-  SCHEDULED: "SCHEDULED",
-  CLOSED: "CLOSED",
+      DRAFT: "draft",
+      LIVE: "live",
+      PAUSED: "paused",
+      SCHEDULED: "scheduled",
+      CLOSED: "closed",
 } as const;
