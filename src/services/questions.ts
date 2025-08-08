@@ -1,5 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Question } from "@/components/dashboard/quizzes/questions/columns";
+
+type Question = {
+  id: string;
+  text: string;
+  quizId: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export const questionsApi = createApi({
   reducerPath: "questionsApi",
