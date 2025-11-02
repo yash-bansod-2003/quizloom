@@ -10,6 +10,7 @@ const RootLayout = lazy(() => import("@/layouts/root.js"));
 const AppLayout = lazy(() => import("@/layouts/app.js"));
 const AuthenticationLayout = lazy(() => import("@/layouts/authentication"));
 const DashboardLayout = lazy(() => import("@/layouts/dashboard"));
+const ManageQuizLayout = lazy(() => import("@/layouts/manage-quiz"));
 
 const LoginPage = lazy(() => import("@/pages/auth/login"));
 const RegisterPage = lazy(() => import("@/pages/auth/register"));
@@ -19,7 +20,13 @@ const AboutPage = lazy(() => import("@/pages/about"));
 
 const DashboardHomePage = lazy(() => import("@/pages/dashboard/home"));
 const DashboardQuizzesPage = lazy(() => import("@/pages/dashboard/quizzes"));
-const DashboardSettingsPage = lazy(() => import("@/pages/dashboard/settings"));
+const DashboardSettingsPage = lazy(
+  () => import("@/pages/dashboard/manage-quiz/settings"),
+);
+
+const DashboardManageQuizPage = lazy(
+  () => import("@/pages/dashboard/manage-quiz/home"),
+);
 
 const router = createBrowserRouter([
   {
@@ -111,6 +118,23 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<Loading />}>
                 <DashboardQuizzesPage />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+      {
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ManageQuizLayout />
+          </Suspense>
+        ),
+        children: [
+          {
+            path: "/manage/:id",
+            element: (
+              <Suspense fallback={<Loading />}>
+                <DashboardManageQuizPage />
               </Suspense>
             ),
           },

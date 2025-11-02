@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DeleteDialog } from "@/components/dashboard/quizzes/delete";
+import { useNavigate } from "react-router-dom";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
@@ -22,6 +23,7 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const [isOpen, setIsOpen] = React.useState(false);
+  const navigate = useNavigate();
   const handleCopy = async () => {
     const quiz = row.original as Quiz;
     if (quiz.id) {
@@ -36,7 +38,7 @@ export function DataTableRowActions<TData>({
 
   return (
     <>
-      <DeleteDialog open={isOpen} />
+      <DeleteDialog open={isOpen} setIsOpen={setIsOpen} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -48,6 +50,13 @@ export function DataTableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
+          <DropdownMenuItem
+            onClick={() => {
+              navigate(`/manage/${(row.original as Quiz).id}`);
+            }}
+          >
+            Manage
+          </DropdownMenuItem>
           <DropdownMenuItem>Edit</DropdownMenuItem>
           <DropdownMenuItem>Duplicate</DropdownMenuItem>
           <DropdownMenuItem onClick={handleCopy}>Copy ID</DropdownMenuItem>
@@ -55,7 +64,10 @@ export function DataTableRowActions<TData>({
           <DropdownMenuItem>View Results</DropdownMenuItem>
           <DropdownMenuItem>Export</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setIsOpen(true)}>
+          <DropdownMenuItem
+            variant="destructive"
+            onClick={() => setIsOpen(true)}
+          >
             Delete
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>

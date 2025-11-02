@@ -1,9 +1,9 @@
-import { MainNav } from "@/components/dashboard-nav";
-import { UserNav } from "@/components/user-nav";
 import { useGetSessionQuery } from "@/services/authentication";
 import { Loading } from "@/components/loading";
 import { Navigate, Outlet } from "react-router-dom";
-import { ModeToggle } from "@/components/mode-toggle";
+import { AppSidebar } from "@/components/dashboard/app-sidebar";
+import { SiteHeader } from "@/components/dashboard/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function DashboardPage() {
   const { isLoading, data: session } = useGetSessionQuery();
@@ -17,21 +17,21 @@ export default function DashboardPage() {
   }
 
   return (
-    <>
-      <div className="hidden flex-col md:flex">
-        <div className="border-b">
-          <div className="flex h-16 items-center px-4">
-            <MainNav className="mx-6" />
-            <div className="ml-auto flex items-center space-x-4">
-              <ModeToggle />
-              {session?.user && <UserNav user={session.user} />}
-            </div>
-          </div>
-        </div>
-        <div className="flex-1 space-y-4 p-8 pt-6">
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader />
+        <div className="flex flex-1 flex-col">
           <Outlet />
         </div>
-      </div>
-    </>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

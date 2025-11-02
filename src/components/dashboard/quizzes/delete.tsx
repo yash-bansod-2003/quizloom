@@ -10,12 +10,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { buttonVariants } from "@/components/ui/button";
 
 type DeleteDialogProps = React.PropsWithChildren & {
   open?: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export function DeleteDialog({ open, children }: DeleteDialogProps) {
+export function DeleteDialog({ open, setIsOpen, children }: DeleteDialogProps) {
   return (
     <AlertDialog open={open}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -28,8 +30,14 @@ export function DeleteDialog({ open, children }: DeleteDialogProps) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogCancel onClick={() => setIsOpen(false)}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            className={buttonVariants({ variant: "destructive" })}
+          >
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
